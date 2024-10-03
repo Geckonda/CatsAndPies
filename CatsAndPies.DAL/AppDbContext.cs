@@ -18,11 +18,13 @@ namespace CatsAndPies.DAL
         }
         public DbSet<RoleEntity> Roles => Set<RoleEntity>();
         public DbSet<UserEntity> Users => Set<UserEntity>();
+        public DbSet<QuestionnaireEntity> Questionnairies => Set<QuestionnaireEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RolesConfiguration());
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionnairiesConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

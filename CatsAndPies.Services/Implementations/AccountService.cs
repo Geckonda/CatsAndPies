@@ -67,7 +67,7 @@ namespace CatsAndPies.Services.Implementations
                 {
                     Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Неудалось авторизироваться. Что-то пошло не так..."
+                    MessageForUser = "Не удалось авторизироваться. Что-то пошло не так..."
                 };
             }
         }
@@ -116,7 +116,7 @@ namespace CatsAndPies.Services.Implementations
                 {
                     Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Неудалось зарегистрироваться. Что-то пошло не так..."
+                    MessageForUser = "Не удалось зарегистрироваться. Что-то пошло не так..."
                 };
             }
         }

@@ -58,6 +58,8 @@ namespace CatsAndPies
 
             builder.Services.InitialiseRepositories();
             builder.Services.InitialiseServices();
+            builder.Services.InitialiseMappers();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
