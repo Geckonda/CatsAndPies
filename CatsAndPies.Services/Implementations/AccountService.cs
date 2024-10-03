@@ -128,6 +128,7 @@ namespace CatsAndPies.Services.Implementations
             {
                 Subject = new ClaimsIdentity(new[]
                 {
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.Login),
                         new Claim(ClaimTypes.Role, "User")
                     }),
