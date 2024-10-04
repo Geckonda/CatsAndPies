@@ -1,5 +1,6 @@
 ﻿using CatsAndPies.DAL.Repositories;
 using CatsAndPies.Domain.Abstractions.Repositories;
+using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Services.Implementations;
@@ -12,7 +13,7 @@ namespace CatsAndPies
         public static void InitialiseRepositories(this IServiceCollection services)
         {
             services.AddScoped<IBaseRepository<UserEntity>, UserRepository>();
-            services.AddScoped<IBaseRepository<QuestionnaireEntity>, QuestionnaireRepository>();
+            services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
         }
 
         public static void InitialiseServices(this IServiceCollection services)

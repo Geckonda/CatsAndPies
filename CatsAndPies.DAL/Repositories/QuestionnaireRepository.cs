@@ -1,4 +1,5 @@
 ﻿using CatsAndPies.Domain.Abstractions.Repositories;
+using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CatsAndPies.DAL.Repositories
 {
-    public class QuestionnaireRepository : IBaseRepository<QuestionnaireEntity>
+    public class QuestionnaireRepository : IQuestionnaireRepository
     {
         private readonly AppDbContext _db;
         public QuestionnaireRepository(AppDbContext db)
@@ -41,6 +42,13 @@ namespace CatsAndPies.DAL.Repositories
             return await _db.Questionnairies
                 .Include (q => q.User)
                 .FirstOrDefaultAsync(q => q.Id == id);
+        }
+
+        public async Task<QuestionnaireEntity?> GetOneByUserId(int userId)
+        {
+            return await _db.Questionnairies
+                .Include (q => q.User)
+                .FirstOrDefaultAsync (q => q.UserId == userId);
         }
 
         public async Task Update(QuestionnaireEntity entity)

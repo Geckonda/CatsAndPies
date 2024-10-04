@@ -3,6 +3,7 @@ using CatsAndPies.DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace CatsAndPies
@@ -43,6 +44,8 @@ namespace CatsAndPies
                 options.AddPolicy("AllowFrontend", policy =>
                 {
                     policy.WithOrigins("http://127.0.0.1:5500") // Указываем точный URL фронтенда
+                            .WithOrigins("http://localhost:3000")
+                            .WithOrigins("http://192.168.242.123:3000")
                           .AllowAnyHeader()                   // Разрешаем любые заголовки
                           .AllowAnyMethod()                   // Разрешаем любые HTTP методы
                           .AllowCredentials();                // Разрешаем передачу учетных данных
@@ -53,8 +56,35 @@ namespace CatsAndPies
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // Настройка swagger чтобы можно было отлаживать методы с [Authorize]
+            builder.Services.AddSwaggerGen(options =>
+            {
+                // Добавляем поддержку JWT-токенов
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Введите JWT токен следующим образом: Bearer {ваш токен}"
+                });
 
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             builder.Services.InitialiseRepositories();
             builder.Services.InitialiseServices();

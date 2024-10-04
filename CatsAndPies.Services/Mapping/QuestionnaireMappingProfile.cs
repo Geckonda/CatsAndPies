@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatsAndPies.Domain.DTO.Request;
+using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace CatsAndPies.Services.Mapping
         public QuestionnaireMappingProfile()
         {
             CreateMap<QuestionnaireEntity, QuestionnaireRequestDto>().ReverseMap();
+            CreateMap<QuestionnaireEntity, QuestionnaireResponseDto>().ReverseMap();
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using CatsAndPies.Domain.Abstractions.Repositories;
+using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.DTO.Request;
+using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Enums;
 using CatsAndPies.Domain.Response;
@@ -17,10 +18,10 @@ namespace CatsAndPies.Services.Implementations
     public class QuestionnaireService : IQuestionnaireService
     {
         private readonly ILogger<QuestionnaireService> _logger;
-        private readonly IBaseRepository<QuestionnaireEntity> _questionnaireRepository;
+        private readonly IQuestionnaireRepository _questionnaireRepository;
         private readonly IMapper _mapper;
 
-        public QuestionnaireService(IBaseRepository<QuestionnaireEntity> repository,
+        public QuestionnaireService(IQuestionnaireRepository repository,
             ILogger<QuestionnaireService> logger,
             IMapper mapper)
         {
@@ -68,6 +69,42 @@ namespace CatsAndPies.Services.Implementations
                     MessageForUser = "Не удалось добавить анкету. Что-то пошло не так..."
                 };
 			}
+        }
+
+        public async Task<BaseResponse<QuestionnaireResponseDto>> Get(int userId)
+        {
+            try
+            {
+                var questionnaire = await _questionnaireRepository.GetOneByUserId(userId);
+                if (questionnaire == null)
+                {
+                    return new()
+                    {
+                        StatusCode = StatusCode.NotFound,
+                        MessageForUser = "Анкета не найдена",
+                        Description = $"Анкета не найдена"
+                    };
+                }
+                var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
+                return new()
+                {
+                    StatusCode = StatusCode.Ok,
+                    Data = model,
+                    MessageForUser = "Анкета получена",
+                    Description = "Анкета получена"
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"[Get questionnaire]: {ex.Message}");
+                return new()
+                {
+                    Description = ex.Message,
+                    StatusCode = StatusCode.InternalServerError,
+                    MessageForUser = "Не удалось получить анкету. Что-то пшло не так..."
+                };
+            }
         }
     }
 }
