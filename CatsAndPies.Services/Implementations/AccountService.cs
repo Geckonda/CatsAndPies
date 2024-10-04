@@ -130,7 +130,7 @@ namespace CatsAndPies.Services.Implementations
                 {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.Login),
-                        new Claim(ClaimTypes.Role, "User")
+                        new Claim(ClaimTypes.Role, user.Role!.Name)
                     }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
