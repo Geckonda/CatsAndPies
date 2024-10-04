@@ -71,7 +71,41 @@ namespace CatsAndPies.Services.Implementations
 			}
         }
 
-        public async Task<BaseResponse<QuestionnaireResponseDto>> Get(int userId)
+        public async Task<BaseResponse<QuestionnaireResponseDto>> GetById(int id)
+        {
+            try
+            {
+                var questionnaire = await _questionnaireRepository.GetOneById(id);
+                if (questionnaire == null)
+                {
+                    return new()
+                    {
+                        StatusCode = StatusCode.NotFound,
+                        MessageForUser = $"Анкета не найдена",
+                        Description = $"Анкета не найдена"
+                    };
+                }
+                var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
+                return new()
+                {
+                    StatusCode = StatusCode.Ok,
+                    Data = model,
+                    MessageForUser = "Анкета получена",
+                    Description = "Анкета получена"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new()
+                {
+                    StatusCode = StatusCode.InternalServerError,
+                    MessageForUser = "Не удалось получить анкету, что-то пошло не так...",
+                    Description = "Не удалось получить анкету, что-то пошло не так...",
+                };
+            }
+        }
+
+        public async Task<BaseResponse<QuestionnaireResponseDto>> GetByUserId(int userId)
         {
             try
             {

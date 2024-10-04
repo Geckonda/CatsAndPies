@@ -12,6 +12,7 @@ namespace CatsAndPies.Domain.Abstractions.Services
     public interface IQuestionnaireService
     {
         Task<BaseResponse<bool>> Add(QuestionnaireRequestDto model);
-        Task<BaseResponse<QuestionnaireResponseDto>> Get(int userId);
+        Task<BaseResponse<QuestionnaireResponseDto>> GetByUserId(int userId);
+        Task<BaseResponse<QuestionnaireResponseDto>> GetById(int id);
     }
 }
