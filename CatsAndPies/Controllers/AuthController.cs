@@ -32,8 +32,8 @@ namespace CatsAndPies.Controllers
         {
             var response = await _accountService.Register(model);
             if (response.StatusCode == Domain.Enums.StatusCode.Ok)
-                return Ok(response);
-            return Unauthorized(response);
+                return CreatedAtAction("Registration", response);
+            return Conflict(response);
         }
     }
 }

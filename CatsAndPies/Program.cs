@@ -45,7 +45,8 @@ namespace CatsAndPies
                 {
                     policy.WithOrigins("http://127.0.0.1:5500") // Указываем точный URL фронтенда
                             .WithOrigins("http://localhost:3000")
-                            .WithOrigins("http://192.168.242.123:3000")
+                            .WithOrigins("https://geckonda.github.io")
+                            .WithOrigins("https://maximbri.github.io")
                           .AllowAnyHeader()                   // Разрешаем любые заголовки
                           .AllowAnyMethod()                   // Разрешаем любые HTTP методы
                           .AllowCredentials();                // Разрешаем передачу учетных данных

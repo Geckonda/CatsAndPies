@@ -42,6 +42,7 @@ namespace CatsAndPies.Services.Implementations
                 {
                     return new()
                     {
+                        StatusCode = StatusCode.Unauthorized,
                         Description = $"Провальная авторизация",
                         MessageForUser = "Логин или пароль указаны неверно",
                     };
@@ -83,6 +84,7 @@ namespace CatsAndPies.Services.Implementations
                 if (user != null)
                     return new BaseResponse<LoginResponseDto>
                     {
+                        StatusCode = StatusCode.Conflict,
                         MessageForUser = "Пользователь с таким логином же зарегистрирован",
                         Description = "Регистрация провалена. Причина: пользователь с таким логином же зарегистрирован"
                     };
@@ -103,7 +105,7 @@ namespace CatsAndPies.Services.Implementations
                 };
                 return new()
                 {
-                    StatusCode = StatusCode.Ok,
+                    StatusCode = StatusCode.Created,
                     Data = result,
                     MessageForUser = "Регистрация прошла успешно",
                     Description = $"Пользователь {user.Login} успешно зарегистрировался"

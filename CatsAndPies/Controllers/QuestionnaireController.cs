@@ -25,7 +25,7 @@ namespace CatsAndPies.Controllers
             model.UserId = GetUserId();
             var response = await _questionnaireService.Add(model);
             if(response.StatusCode == Domain.Enums.StatusCode.Ok)
-                return Ok(response);
+                return CreatedAtAction("AddQuestionnaire", response);
             //Авантюра, не знаю, можно ли так???
             return BadRequest(response);
         }
