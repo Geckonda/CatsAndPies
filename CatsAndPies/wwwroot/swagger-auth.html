@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagger Authorization</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1c1c1c; /* Темный фон */
+            font-family: Arial, sans-serif;
+        }
+
+        #authForm {
+            background-color: #2a2a2a; /* Темный фон для формы */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 300px; /* Ширина формы */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            color: #fff; /* Светлый зеленый для текста меток */
+            margin-bottom: 5px;
+            display: block;
+        }
+        h2 {
+            color: #85ea2d; /* Светлый зеленый для текста меток */
+        }
+        input {
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #fff; /* Светло-зеленая рамка */
+            border-radius: 4px;
+            background-color: #3a3a3a; /* Темный фон для полей ввода */
+            color: #fff; /* Белый текст */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #85ea2d; /* Ярко-зеленая рамка при фокусе */
+            background-color: #4a4a4a; /* Немного светлее фон при фокусе */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #85ea2d; /* Ярко-зеленый фон кнопки */
+            border: none;
+            border-radius: 4px;
+            color: #1c1c1c; /* Темный текст */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #85ea2d; /* Светлый зеленый фон при наведении */
+        }
+    </style>
+</head>
+<body>
+    <form id="authForm">
+    <h2>Доступ к Swagger</h2>
+        <label for="username">Логин:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Пароль:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <button type="button" onclick="submitForm()">Отправить</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            const login = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/api/Auth/LoginSwagger', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ login: login, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const token = data.data.token.token;
+                const expiresIn = data.data.token.expiresIn; 
+
+                const expirationDate = new Date(expiresIn);
+
+                const maxAge = Math.floor((expirationDate - new Date()) / 1000); 
+
+                document.cookie = `authToken=${token}; path=/; max-age=${maxAge}; secure`;
+
+                window.location.href = '/swagger'; 
+            })
+            .catch(error => {
+                alert("Доступ запрещен!");
+            });
+        }
+    </script>
+</body>
+</html>

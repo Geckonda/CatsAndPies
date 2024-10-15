@@ -31,5 +31,12 @@ namespace CatsAndPies.Controllers
         {
             return Ok(new { data = "Hello" });
         }
+
+        [HttpGet("SwaggerDevAuth")]
+        public IActionResult GetLoginPage()
+        {
+            var htmlContent = System.IO.File.ReadAllText("wwwroot/swagger-auth.html");
+            return Content(htmlContent, "text/html");
+        }
     }
 }

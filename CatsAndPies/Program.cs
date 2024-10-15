@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace CatsAndPies
@@ -94,11 +95,7 @@ namespace CatsAndPies
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+           
 
             app.UseHttpsRedirection();
 
@@ -107,7 +104,58 @@ namespace CatsAndPies
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseWhen(context => context.Request.Path.StartsWithSegments("/swagger"), appBuilder =>
+                {
+                    appBuilder.Use(async (context, next) =>
+                    {
+                        var authToken = context.Request.Cookies["authToken"];
+                        if (string.IsNullOrEmpty(authToken))
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return;
+                        }
+
+                        var handler = new JwtSecurityTokenHandler();
+                        var jwtToken = handler.ReadJwtToken(authToken);
+                        if (jwtToken.ValidTo < DateTime.UtcNow)
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized; // Токен истек
+                            return;
+                        }
+                        var roles = jwtToken.Claims.Where(claim => claim.Type == "role").Select(claim => claim.Value).ToList();
+                        //if (!context.User.Identity.IsAuthenticated || !context.User.IsInRole("Admin"))
+                        if (!roles.Contains("Admin"))
+                        {
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                            return;
+                        }
+
+                        await next.Invoke();
+                    });
+                });
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CatsAndPies V1");
+
+                    // Настройка Swagger UI на поддержку авторизации
+                    c.RoutePrefix = "swagger"; // Если необходимо изменить путь к Swagger
+                });
+            }
+            else
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+
             app.MapControllers();
+            app.UseStaticFiles();
 
 
             app.Run();

@@ -31,9 +31,18 @@ namespace CatsAndPies.Controllers
         public async Task<IActionResult> Registration([FromBody] RegisterRequestDto model)
         {
             var response = await _accountService.Register(model);
-            if (response.StatusCode == Domain.Enums.StatusCode.Ok)
+            if (response.StatusCode == Domain.Enums.StatusCode.Created)
                 return CreatedAtAction("Registration", response);
             return Conflict(response);
+        }
+
+        [HttpPost("LoginSwagger")]
+        public async Task<IActionResult> LoginSwagger([FromBody] LoginRequestDto model)
+        {
+            var response = await _accountService.Login(model);
+            if (response.StatusCode == Domain.Enums.StatusCode.Ok)
+                return Ok(response);
+            return Unauthorized();
         }
     }
 }

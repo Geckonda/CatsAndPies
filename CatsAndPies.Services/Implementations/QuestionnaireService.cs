@@ -51,7 +51,7 @@ namespace CatsAndPies.Services.Implementations
                 await _questionnaireRepository.Add(questionnaire);
                 return new()
                 {
-                    StatusCode = StatusCode.Ok,
+                    StatusCode = StatusCode.Created,
                     Data = true,
                     MessageForUser = "Анкета успешно добавлена",
 
