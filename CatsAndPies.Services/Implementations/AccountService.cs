@@ -1,4 +1,5 @@
 ﻿using CatsAndPies.Domain.Abstractions.Repositories;
+using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.DTO.Response;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -21,8 +23,8 @@ namespace CatsAndPies.Services.Implementations
     public class AccountService : IAccountService
     {
         private readonly ILogger<AccountService> _logger;
-        private readonly IBaseRepository<UserEntity> _userRepository;
-        public AccountService(IBaseRepository<UserEntity> userRepository,
+        private readonly IUserRepository _userRepository;
+        public AccountService(IUserRepository userRepository,
             ILogger<AccountService> logger)
         {
             _userRepository = userRepository;
@@ -33,10 +35,7 @@ namespace CatsAndPies.Services.Implementations
         {
             try
             {
-                var user = _userRepository
-                    .GetAll().Result!
-                    .Where(x => x.Login == model.Login)
-                    .FirstOrDefault();
+                var user = await _userRepository.GetOneByLogin(model.Login);
 
                 if (user == null || user.Password != HashPasswordHelper.HashPassword(model.Password))
                 {
@@ -77,10 +76,7 @@ namespace CatsAndPies.Services.Implementations
         {
             try
             {
-                var user = _userRepository
-                    .GetAll().Result!
-                    .Where(x => x.Login == model.Login)
-                    .FirstOrDefault();
+                var user = await _userRepository.GetOneByLogin(model.Login);
                 if (user != null)
                     return new BaseResponse<LoginResponseDto>
                     {
@@ -97,6 +93,11 @@ namespace CatsAndPies.Services.Implementations
                     Password = HashPasswordHelper.HashPassword(model.Password),
                 };
                 await _userRepository.Add(user);
+                user.Role = new()
+                {
+                    Id = (int)RoleCode.User,
+                    Name = "User"
+                };
                 var result = new LoginResponseDto()
                 {
                     Name = user.Name,
@@ -134,7 +135,7 @@ namespace CatsAndPies.Services.Implementations
                         new Claim(ClaimTypes.Name, user.Login),
                         new Claim(ClaimTypes.Role, user.Role!.Name)
                     }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(12),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

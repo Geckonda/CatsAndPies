@@ -1,4 +1,5 @@
 ﻿using CatsAndPies.Domain.Abstractions.Repositories;
+using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CatsAndPies.DAL.Repositories
 {
-    public class UserRepository : IBaseRepository<UserEntity>
+    public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _db;
         public UserRepository(AppDbContext db)
@@ -42,6 +43,13 @@ namespace CatsAndPies.DAL.Repositories
                 .Include(x => x.Role)
                 .FirstOrDefaultAsync(x => x.Id ==  id);
 
+        }
+
+        public async Task<UserEntity?> GetOneByLogin(string login)
+        {
+            return await _db.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x =>  login == x.Login);
         }
 
         public async Task Update(UserEntity entity)

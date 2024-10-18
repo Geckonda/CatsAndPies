@@ -12,7 +12,7 @@ namespace CatsAndPies
     {
         public static void InitialiseRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IBaseRepository<UserEntity>, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
         }
 
@@ -26,6 +26,7 @@ namespace CatsAndPies
             services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<QuestionnaireMappingProfile>();
+                cfg.AddProfile<UserMappingProfile>();
             });
         }
     }
