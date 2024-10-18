@@ -51,6 +51,14 @@ namespace CatsAndPies.DAL.Repositories
                 .FirstOrDefaultAsync (q => q.UserId == userId);
         }
 
+        public async Task<int> GetOneIdByUserId(int userId)
+        {
+            return await _db.Questionnairies
+                .Where(q => q.UserId == userId)
+                .Select(q => q.Id) 
+                .FirstOrDefaultAsync();
+        }
+
         public async Task Update(QuestionnaireEntity entity)
         {
             await _db.Questionnairies

@@ -10,5 +10,6 @@ namespace CatsAndPies.Domain.Abstractions.Repositories.Combined
     public interface IQuestionnaireRepository : IBaseRepository<QuestionnaireEntity>,
         IUserOwnedRepository<QuestionnaireEntity>
     {
+        Task<int> GetOneIdByUserId(int userId);
     }
 }

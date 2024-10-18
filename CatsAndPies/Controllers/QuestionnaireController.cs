@@ -45,5 +45,23 @@ namespace CatsAndPies.Controllers
                 return Ok(response);
             return BadRequest(response);
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateFullQuestionnaire([FromBody] QuestionnaireRequestDto model)
+        {
+            model.UserId = GetUserId();
+            var response = await _questionnaireService.UpdateFull(model);
+            if (response.StatusCode == Domain.Enums.StatusCode.Ok)
+                return Ok(response);
+            return BadRequest(response);
+
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteQuestionnaireByUserId()
+        {
+            var response = await _questionnaireService.DeleteByUserId(GetUserId());
+            if(response.StatusCode == Domain.Enums.StatusCode.Ok)
+                return Ok(response);
+            return BadRequest(response);
+        }
     }
 }

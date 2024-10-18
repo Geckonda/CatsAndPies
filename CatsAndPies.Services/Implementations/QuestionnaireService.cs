@@ -46,7 +46,6 @@ namespace CatsAndPies.Services.Implementations
                         Data = false,
                     };
                 }
-                //Заглушка, сделай маппинг!!!
                 questionnaire = _mapper.Map<QuestionnaireEntity>(model);
                 await _questionnaireRepository.Add(questionnaire);
                 return new()
@@ -69,6 +68,32 @@ namespace CatsAndPies.Services.Implementations
                     MessageForUser = "Не удалось добавить анкету. Что-то пошло не так..."
                 };
 			}
+        }
+
+        public async Task<BaseResponse<bool>> DeleteByUserId(int userId)
+        {
+            var response = new BaseResponse<bool>();
+            try
+            {
+                var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(userId);
+                await _questionnaireRepository.Delete(questionnaireId);
+                response.Data = true;
+                response.Description = "Анкета успешно удалена";
+                response.MessageForUser = "Анкета удалена";
+                response.StatusCode = StatusCode.Ok;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"[Delete questionnaire]: {ex.Message}");
+                return new()
+                {
+                    Data = false,
+                    Description = ex.Message,
+                    StatusCode = StatusCode.InternalServerError,
+                    MessageForUser = "Не удалось удалить анкету. Что-то пошло не так..."
+                };
+            }
         }
 
         public async Task<BaseResponse<QuestionnaireResponseDto>> GetById(int id)
@@ -136,7 +161,34 @@ namespace CatsAndPies.Services.Implementations
                 {
                     Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось получить анкету. Что-то пшло не так..."
+                    MessageForUser = "Не удалось получить анкету. Что-то пошло не так..."
+                };
+            }
+        }
+
+        public async Task<BaseResponse<bool>> UpdateFull(QuestionnaireRequestDto model)
+        {
+            try
+            {
+                var response = new BaseResponse<bool>();
+                var questionnaire = _mapper.Map<QuestionnaireEntity>(model);
+                questionnaire.Id = await _questionnaireRepository.GetOneIdByUserId(model.UserId);
+                await _questionnaireRepository.Update(questionnaire);
+                response.Data = true;
+                response.StatusCode = StatusCode.Ok;
+                response.MessageForUser = "Анкета обновлена";
+                response.Description = "Анкета успешно обновлена";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"[UpdateFull questionnaire]: {ex.Message}");
+                return new()
+                {
+                    Data = false,
+                    Description = ex.Message,
+                    StatusCode = StatusCode.InternalServerError,
+                    MessageForUser = "Не удалось обновить анкету. Что-то пошло не так..."
                 };
             }
         }

@@ -14,5 +14,7 @@ namespace CatsAndPies.Domain.Abstractions.Services
         Task<BaseResponse<bool>> Add(QuestionnaireRequestDto model);
         Task<BaseResponse<QuestionnaireResponseDto>> GetByUserId(int userId);
         Task<BaseResponse<QuestionnaireResponseDto>> GetById(int id);
+        Task<BaseResponse<bool>> UpdateFull(QuestionnaireRequestDto model);
+        Task<BaseResponse<bool>> DeleteByUserId(int userId);
     }
 }
