@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CatsAndPies.Domain.DTO.Request
 {
     public class QuestionnaireRequestDto
     {
+        [JsonIgnore]
         public int UserId { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime Birthday { get; set; }

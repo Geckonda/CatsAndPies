@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace CatsAndPies.Controllers
@@ -9,13 +10,15 @@ namespace CatsAndPies.Controllers
     public class AccountController : Controller
     {
         [Authorize]
-        [HttpGet("profile")]
+        [SwaggerIgnore]
+        [HttpGet("GetUserName")]
         public IActionResult GetProfile()
         {
-            var username = User.Identity.Name;
+            var username = User.Identity!.Name;
             return Ok(new { username });
         }
         [HttpGet("hello")]
+        [SwaggerIgnore]
         public IActionResult SayHello()
         {
             string role = string.Empty;
@@ -26,6 +29,7 @@ namespace CatsAndPies.Controllers
             return Ok(new { data = "Hello, I haven't any role(((" });
         }
         [HttpGet("SayHelloToAdmin")]
+        [SwaggerIgnore]
         [Authorize(Roles = "Admin")]
         public IActionResult SayHelloToAdmin()
         {
@@ -33,6 +37,7 @@ namespace CatsAndPies.Controllers
         }
 
         [HttpGet("SwaggerDevAuth")]
+        [SwaggerOperation(Summary = "Страница авторизации Swagger", Description = "Возвращает html."),]
         public IActionResult GetLoginPage()
         {
             var htmlContent = System.IO.File.ReadAllText("wwwroot/swagger-auth.html");

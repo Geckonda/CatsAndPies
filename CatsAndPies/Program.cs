@@ -61,6 +61,8 @@ namespace CatsAndPies
             // Настройка swagger чтобы можно было отлаживать методы с [Authorize]
             builder.Services.AddSwaggerGen(options =>
             {
+                //Добавляем аннотации для описания методов
+                options.EnableAnnotations();
                 // Добавляем поддержку JWT-токенов
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
