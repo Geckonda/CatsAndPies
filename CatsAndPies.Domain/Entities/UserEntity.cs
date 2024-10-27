@@ -15,5 +15,6 @@ namespace CatsAndPies.Domain.Entities
         public string Password { get; set; } = string.Empty;
         public RoleEntity? Role { get; set; }
         public QuestionnaireEntity? Questionnaire { get; set; }
+        public CatEntity? Cat { get; set; }
     }
 }
