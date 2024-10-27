@@ -11,7 +11,6 @@ namespace CatsAndPies.Domain.Abstractions.Repositories
         Task Add(T entity);
         Task Update(T entity);
         Task Delete(int id);
-        Task<List<T>?> GetAll();
         Task<T?> GetOneById(int id);
     }
 }

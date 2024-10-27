@@ -30,13 +30,6 @@ namespace CatsAndPies.DAL.Repositories
                 .ExecuteDeleteAsync();
         }
 
-        public async Task<List<UserEntity>?> GetAll()
-        {
-            return await _db.Users
-                .Include(x => x.Role)
-                .ToListAsync();
-        }
-
         public async Task<UserEntity?> GetOneById(int id)
         {
             return await _db.Users

@@ -33,10 +33,7 @@ namespace CatsAndPies.Services.Implementations
         {
 			try
 			{
-				var questionnaire = _questionnaireRepository
-                    .GetAll().Result!
-                    .Where(q => q.UserId == model.UserId)
-                    .FirstOrDefault();
+                var questionnaire = await _questionnaireRepository.GetOneByUserId(model.UserId);
                 if (questionnaire != null)
                 {
                     return new()

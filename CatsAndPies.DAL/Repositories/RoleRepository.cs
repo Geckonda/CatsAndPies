@@ -29,12 +29,6 @@ namespace CatsAndPies.DAL.Repositories
                 .ExecuteDeleteAsync();
         }
 
-        public async Task<List<RoleEntity>?> GetAll()
-        {
-            return await _db.Roles
-                .ToListAsync();
-        }
-
         public async Task<RoleEntity?> GetOneById(int id)
         {
             return await _db.Roles

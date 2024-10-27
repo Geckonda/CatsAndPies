@@ -30,12 +30,6 @@ namespace CatsAndPies.DAL.Repositories
                 .ExecuteDeleteAsync();
         }
 
-        public async Task<List<QuestionnaireEntity>?> GetAll()
-        {
-            return await _db.Questionnairies
-                .Include(q => q.User)
-                .ToListAsync();
-        }
 
         public async Task<QuestionnaireEntity?> GetOneById(int id)
         {
