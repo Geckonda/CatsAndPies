@@ -11,5 +11,6 @@ namespace CatsAndPies.Domain.Models.Cat
         protected List<string> _greetings;
         public abstract string GenerateGreetings();
         public abstract string GenerateResponse(string message);
+        public abstract string GenerateRandomMessage();
     }
 }

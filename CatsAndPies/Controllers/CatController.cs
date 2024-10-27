@@ -10,10 +10,21 @@ namespace CatsAndPies.Controllers
     public class CatController : Controller
     {
         private readonly ICatCreationService _catCreationService;
+        private readonly ICatMessageService _catMessageService;
         private int GetUserId() => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        public CatController(ICatCreationService catCreationService)
+        public CatController(ICatCreationService catCreationService,
+            ICatMessageService catMessageService)
         {
             _catCreationService = catCreationService;
+            _catMessageService = catMessageService;
+        }
+        [HttpGet("SaySomething")]
+        public async Task<IActionResult> SaySomething()
+        {
+            var response = await _catMessageService.SaySomething(GetUserId());
+            if(response.StatusCode == Domain.Enums.StatusCode.Ok)
+                return Ok(response);
+            return BadRequest(response);
         }
         [HttpPost]
         public async Task<IActionResult> CreateCat(string name)

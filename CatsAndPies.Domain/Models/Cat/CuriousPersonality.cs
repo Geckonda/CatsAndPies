@@ -47,5 +47,10 @@ namespace CatsAndPies.Domain.Models.Cat
         {
             return _greetings[_random.Next(_greetings.Count)];
         }
+        //Заглушка
+        public override string GenerateRandomMessage()
+        {
+            return _responses[_random.Next(_responses.Count)];
+        }
     }
 }

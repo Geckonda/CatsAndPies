@@ -23,5 +23,9 @@ namespace CatsAndPies.Domain.Models.Cat
         {
             return PersonalityBehavior.GenerateGreetings();
         }
+        public string SaySomething()
+        {
+            return PersonalityBehavior.GenerateRandomMessage();
+        }
     }
 }

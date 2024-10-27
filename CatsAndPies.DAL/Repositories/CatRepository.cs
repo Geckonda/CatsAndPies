@@ -1,5 +1,6 @@
 ﻿using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Entities;
+using CatsAndPies.Domain.Entities.Cats;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,21 +30,60 @@ namespace CatsAndPies.DAL.Repositories
                 .ExecuteDeleteAsync();
         }
 
+        public async Task<int> GetCatBehaviorByUserId(int userId)
+        {
+            return await _db.Cats
+                .Where(x => x.UserId == userId)
+                .Select(x => x.PersonalityId)
+                .FirstOrDefaultAsync();
+        }
 
         public Task<CatEntity?> GetOneById(int id)
         {
             return _db.Cats
-                .Include(x => x.Color)
-                .Include(x => x.Personality)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .Where(x => x.Id == id)
+                .Select(cat => new CatEntity()
+                { 
+                    Id = cat.Id,
+                    Name = cat.Name,
+                    AdoptedTime = cat.AdoptedTime,
+                    Color = new CatsColorEntity
+                    {
+                        Id = cat.Color.Id,
+                        Name = cat.Color.Name 
+                    },
+                    Personality = new CatsPersonalityEntity
+                    {
+                        Id = cat.Personality.Id,
+                        Name = cat.Personality.Name,
+                        Description = cat.Personality.Description 
+                    },
+                })
+                .FirstOrDefaultAsync();
         }
 
         public Task<CatEntity?> GetOneByUserId(int userId)
         {
             return _db.Cats
-                .Include(x => x.Color)
-                .Include(x => x.Personality)
-                .FirstOrDefaultAsync(x => x.UserId == userId);
+                .Where(x => x.UserId == userId)
+                .Select(cat => new CatEntity()
+                {
+                    Id = cat.Id,
+                    Name = cat.Name,
+                    AdoptedTime = cat.AdoptedTime,
+                    Color = new CatsColorEntity
+                    {
+                        Id = cat.Color.Id,
+                        Name = cat.Color.Name
+                    },
+                    Personality = new CatsPersonalityEntity
+                    {
+                        Id = cat.Personality.Id,
+                        Name = cat.Personality.Name,
+                        Description = cat.Personality.Description
+                    },
+                })
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace CatsAndPies.Services.Implementations
 {
@@ -32,8 +33,19 @@ namespace CatsAndPies.Services.Implementations
         {
             try
             {
+                CatEntity entity = await _catRepository.GetOneByUserId(userId);
+                if(entity != null)
+                {
+                    return new BaseResponse<CatResponseDTO>
+                    {
+                        StatusCode = StatusCode.Conflict,
+                        Data = null,
+                        MessageForUser = $"У тебя уже есть кот {entity.Name}.",
+                        Description = "Кот уже был создан ранее."
+                    };
+                }
                 var (colorId, personalityId) = await _catRepository.GetRandomColorAndPersonality();
-                CatEntity entity = new()
+                entity = new()
                 {
                     Name = name,
                     UserId = userId,
@@ -61,6 +73,31 @@ namespace CatsAndPies.Services.Implementations
                 {
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не найти кота для тебя, что-то пошло не так...",
+                    Description = ex.Message,
+                };
+            }
+        }
+
+        public async Task<BaseResponse<string>> SaySomething(int userId)
+        {
+            try
+            {
+                var personalityId = await _catRepository.GetCatBehaviorByUserId(userId);
+                var cat = _catFactory.CreateCatWithCertainBehavior(personalityId);
+                return new BaseResponse<string>
+                {
+                    StatusCode = StatusCode.Ok,
+                    Data = cat.SaySomething(),
+                    MessageForUser = $"Кот что-то говорит.",
+                    Description = "Кот вернул сообщение"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new()
+                {
+                    StatusCode = StatusCode.InternalServerError,
+                    MessageForUser = "Кот не стал отвечать, что-то пошло не так...",
                     Description = ex.Message,
                 };
             }

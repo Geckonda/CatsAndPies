@@ -14,7 +14,6 @@ namespace CatsAndPies.Domain.DTO.Response.Cat
         public string Name { get; set; }
         public DateTime AdoptedTime { get; set; }
 
-        public UserEntity Owner { get; set; }
         public CatsColorEntity Color { get; set; }
         public CatsPersonalityEntity Personality { get; set; }
         
