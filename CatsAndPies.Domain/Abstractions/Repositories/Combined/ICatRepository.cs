@@ -9,5 +9,6 @@ namespace CatsAndPies.Domain.Abstractions.Repositories.Combined
 {
     public interface ICatRepository : IBaseRepository<CatEntity>, IUserOwnedRepository<CatEntity>
     {
+        public Task<(int, int)> GetRandomColorAndPersonality();
     }
 }

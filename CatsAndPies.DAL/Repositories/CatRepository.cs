@@ -34,7 +34,6 @@ namespace CatsAndPies.DAL.Repositories
         {
             return _db.Cats
                 .Include(x => x.Color)
-                .Include(x => x.Owner)
                 .Include(x => x.Personality)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -43,9 +42,26 @@ namespace CatsAndPies.DAL.Repositories
         {
             return _db.Cats
                 .Include(x => x.Color)
-                .Include(x => x.Owner)
                 .Include(x => x.Personality)
                 .FirstOrDefaultAsync(x => x.UserId == userId);
+        }
+
+        /// <summary>
+        /// Метод получает случайный цвет и характер из БД
+        /// </summary>
+        /// <returns>color, personality</returns>
+        public async Task<(int, int)> GetRandomColorAndPersonality()
+        {
+            var color = await _db.CatsColors
+                .OrderBy(c => Guid.NewGuid())
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+            
+            var personality = await _db.CatsPersonalities
+                .OrderBy(p => Guid.NewGuid())
+                .Select(p => p.Id)
+                .FirstOrDefaultAsync();
+            return (color, personality);
         }
 
         public async Task Update(CatEntity entity)

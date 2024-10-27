@@ -89,10 +89,16 @@ namespace CatsAndPies
                     }
                 });
             });
+            //Предотвращение циклов для JSON
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
 
             builder.Services.InitialiseRepositories();
             builder.Services.InitialiseServices();
             builder.Services.InitialiseMappers();
+            builder.Services.InitialiseFactories();
 
             var app = builder.Build();
 
