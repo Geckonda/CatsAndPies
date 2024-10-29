@@ -41,49 +41,19 @@ namespace CatsAndPies.DAL.Repositories
         public Task<CatEntity?> GetOneById(int id)
         {
             return _db.Cats
-                .Where(x => x.Id == id)
-                .Select(cat => new CatEntity()
-                { 
-                    Id = cat.Id,
-                    Name = cat.Name,
-                    AdoptedTime = cat.AdoptedTime,
-                    Color = new CatsColorEntity
-                    {
-                        Id = cat.Color.Id,
-                        Name = cat.Color.Name 
-                    },
-                    Personality = new CatsPersonalityEntity
-                    {
-                        Id = cat.Personality.Id,
-                        Name = cat.Personality.Name,
-                        Description = cat.Personality.Description 
-                    },
-                })
-                .FirstOrDefaultAsync();
+                .Include(x => x.Personality)
+                .Include(x => x.Color)
+                .Include(x => x.Owner)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public Task<CatEntity?> GetOneByUserId(int userId)
         {
             return _db.Cats
-                .Where(x => x.UserId == userId)
-                .Select(cat => new CatEntity()
-                {
-                    Id = cat.Id,
-                    Name = cat.Name,
-                    AdoptedTime = cat.AdoptedTime,
-                    Color = new CatsColorEntity
-                    {
-                        Id = cat.Color.Id,
-                        Name = cat.Color.Name
-                    },
-                    Personality = new CatsPersonalityEntity
-                    {
-                        Id = cat.Personality.Id,
-                        Name = cat.Personality.Name,
-                        Description = cat.Personality.Description
-                    },
-                })
-                .FirstOrDefaultAsync();
+                .Include(x => x.Personality)
+                .Include(x => x.Color)
+                .Include(x => x.Owner)
+                .FirstOrDefaultAsync(x => x.UserId == userId);
         }
 
         /// <summary>

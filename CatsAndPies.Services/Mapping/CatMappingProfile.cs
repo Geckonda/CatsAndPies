@@ -3,6 +3,7 @@ using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.DTO.Response.Cat;
 using CatsAndPies.Domain.Entities;
+using CatsAndPies.Domain.Entities.Cats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace CatsAndPies.Services.Mapping
         public CatMappingProfile()
         {
             CreateMap<CatEntity, CatResponseDTO>().ReverseMap();
+            CreateMap<CatsColorEntity, CatColorResponseDTO>().ReverseMap();
+            CreateMap<CatsPersonalityEntity, CatPersonalityResponseDTO>().ReverseMap();
+            CreateMap<UserEntity, CatOwnerResponseDTO>().ReverseMap();
         }
     }
 }

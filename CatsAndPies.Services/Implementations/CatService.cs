@@ -55,7 +55,7 @@ namespace CatsAndPies.Services.Implementations
                 };
 
                 await _catRepository.Add(entity);
-                entity = await _catRepository.GetOneById(entity.Id);
+                entity = await _catRepository.GetOneByUserId(userId);
                 var cat = _catFactory.CreateCatWithCertainBehavior(personalityId);
                 var model = _mapper.Map<CatResponseDTO>(entity);
                 model.Phrase = cat.SayHelloToNewOwner();
