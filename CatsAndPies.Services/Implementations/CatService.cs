@@ -33,14 +33,14 @@ namespace CatsAndPies.Services.Implementations
         {
             try
             {
-                CatEntity entity = await _catRepository.GetOneByUserId(userId);
+                var entity = await _catRepository.GetOneByUserId(userId);
                 if(entity != null)
                 {
                     return new BaseResponse<CatResponseDTO>
                     {
                         StatusCode = StatusCode.Conflict,
                         Data = null,
-                        MessageForUser = $"У тебя уже есть кот {entity.Name}.",
+                        MessageForUser = $"У вас уже есть кот {entity.Name}.",
                         Description = "Кот уже был создан ранее."
                     };
                 }
@@ -63,7 +63,7 @@ namespace CatsAndPies.Services.Implementations
                 {
                     StatusCode = StatusCode.Created,
                     Data = model,
-                    MessageForUser = $"Твой новый кот {name}",
+                    MessageForUser = $"Ваш новый кот {name}",
                     Description = "Кот создан"
                 };
             }
@@ -72,7 +72,7 @@ namespace CatsAndPies.Services.Implementations
                 return new()
                 {
                     StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не найти кота для тебя, что-то пошло не так...",
+                    MessageForUser = "Не найти кота для вас, что-то пошло не так...",
                     Description = ex.Message,
                 };
             }
@@ -83,6 +83,16 @@ namespace CatsAndPies.Services.Implementations
             try
             {
                 var personalityId = await _catRepository.GetCatBehaviorByUserId(userId);
+                if(personalityId == 0)
+                {
+                    return new BaseResponse<string>
+                    {
+                        StatusCode = StatusCode.NotFound,
+                        Data = null,
+                        MessageForUser = $"У вас нет кота.",
+                        Description = "Кот не создан."
+                    };
+                }
                 var cat = _catFactory.CreateCatWithCertainBehavior(personalityId);
                 return new BaseResponse<string>
                 {

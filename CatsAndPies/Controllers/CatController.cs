@@ -1,12 +1,14 @@
 ﻿using CatsAndPies.Domain.Abstractions.Services.Cat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace CatsAndPies.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
+    [SwaggerTag("Работа с котом.")]
     public class CatController : Controller
     {
         private readonly ICatCreationService _catCreationService;
@@ -19,6 +21,7 @@ namespace CatsAndPies.Controllers
             _catMessageService = catMessageService;
         }
         [HttpGet("SaySomething")]
+        [SwaggerOperation(Summary = "Получить случайное сообщение от кота", Description = "Data - содержит строку \"что сказал кот\".")]
         public async Task<IActionResult> SaySomething()
         {
             var response = await _catMessageService.SaySomething(GetUserId());
@@ -26,7 +29,8 @@ namespace CatsAndPies.Controllers
                 return Ok(response);
             return BadRequest(response);
         }
-        [HttpPost]
+        [HttpPost("CreateCat")]
+        [SwaggerOperation(Summary = "Создать кота", Description = "Data - содержит информацю о созданном коте.")]
         public async Task<IActionResult> CreateCat(string name)
         {
             var response = await _catCreationService.CreateCat(name, GetUserId());
