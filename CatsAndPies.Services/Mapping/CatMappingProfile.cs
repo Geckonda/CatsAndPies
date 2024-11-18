@@ -17,6 +17,7 @@ namespace CatsAndPies.Services.Mapping
         public CatMappingProfile()
         {
             CreateMap<CatEntity, CatResponseDTO>().ReverseMap();
+            CreateMap<CatEntity, CatResponseWithoutOwnerDTO>().ReverseMap();
             CreateMap<CatsColorEntity, CatColorResponseDTO>().ReverseMap();
             CreateMap<CatsPersonalityEntity, CatPersonalityResponseDTO>().ReverseMap();
             CreateMap<UserEntity, CatOwnerResponseDTO>().ReverseMap();

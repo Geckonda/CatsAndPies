@@ -1,10 +1,13 @@
-﻿using CatsAndPies.Domain.Abstractions.Repositories;
+﻿using AutoMapper;
+using CatsAndPies.Domain.Abstractions.Repositories;
 using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.DTO.Response;
+using CatsAndPies.Domain.DTO.Response.Cat;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Enums;
+using CatsAndPies.Domain.Factories;
 using CatsAndPies.Domain.Helpres;
 using CatsAndPies.Domain.Response;
 using Microsoft.Extensions.Logging;
@@ -24,11 +27,21 @@ namespace CatsAndPies.Services.Implementations
     {
         private readonly ILogger<AccountService> _logger;
         private readonly IUserRepository _userRepository;
+
+        public readonly ICatRepository _catRepository;
+        public readonly CatFactory _catFactory;
+        private readonly IMapper _mapper;
         public AccountService(IUserRepository userRepository,
-            ILogger<AccountService> logger)
+            ILogger<AccountService> logger,
+            ICatRepository catRepository,
+            CatFactory catFactory,
+            IMapper mapper)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _catRepository = catRepository;
+            _catFactory = catFactory;
+            _mapper = mapper;
         }
 
         public async Task<BaseResponse<LoginResponseDto>> Login(LoginRequestDto model)
@@ -46,10 +59,21 @@ namespace CatsAndPies.Services.Implementations
                         MessageForUser = "Логин или пароль указаны неверно",
                     };
                 }
+
+                var entity = await _catRepository.GetOneByUserId(user.Id);
+                CatResponseWithoutOwnerDTO? catDTO = null;
+                if (entity != null)
+                {
+                    var cat = _catFactory.CreateCatWithCertainBehavior(entity.PersonalityId);
+                    catDTO = _mapper.Map<CatResponseWithoutOwnerDTO>(entity);
+                    catDTO.Phrase = "Мяу";
+                }
+
                 var result = new LoginResponseDto()
                 {
                     Name = user.Name,
                     Login = user.Login,
+                    Cat = catDTO,
                     Token = Authenticate(user)
                 };
                 return new()
