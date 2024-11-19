@@ -9,7 +9,7 @@ using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Enums;
 using CatsAndPies.Domain.Factories;
 using CatsAndPies.Domain.Helpres;
-using CatsAndPies.Domain.Response;
+using CatsAndPies.Domain.Models.Response;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -55,7 +55,6 @@ namespace CatsAndPies.Services.Implementations
                     return new()
                     {
                         StatusCode = StatusCode.Unauthorized,
-                        Description = $"Провальная авторизация",
                         MessageForUser = "Логин или пароль указаны неверно",
                     };
                 }
@@ -80,7 +79,6 @@ namespace CatsAndPies.Services.Implementations
                 {
                     StatusCode = StatusCode.Ok,
                     Data = result,
-                    Description = $"Пользователь {user.Login} авторизировался",
                     MessageForUser = "Авторизация прошла успешно!"
                 };
             }
@@ -89,7 +87,6 @@ namespace CatsAndPies.Services.Implementations
                 _logger.LogError(ex, $"[Login]: {ex.Message}]");
                 return new ()
                 {
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось авторизироваться. Что-то пошло не так..."
                 };
@@ -106,7 +103,6 @@ namespace CatsAndPies.Services.Implementations
                     {
                         StatusCode = StatusCode.Conflict,
                         MessageForUser = "Пользователь с таким логином же зарегистрирован",
-                        Description = "Регистрация провалена. Причина: пользователь с таким логином же зарегистрирован"
                     };
 
                 user = new UserEntity()
@@ -133,7 +129,6 @@ namespace CatsAndPies.Services.Implementations
                     StatusCode = StatusCode.Created,
                     Data = result,
                     MessageForUser = "Регистрация прошла успешно",
-                    Description = $"Пользователь {user.Login} успешно зарегистрировался"
                 };
             }
             catch (Exception ex)
@@ -141,7 +136,6 @@ namespace CatsAndPies.Services.Implementations
                 _logger.LogError(ex, $"[Register]: {ex.Message}]");
                 return new()
                 {
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось зарегистрироваться. Что-то пошло не так..."
                 };

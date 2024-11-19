@@ -1,4 +1,5 @@
-﻿using CatsAndPies.Domain.Response;
+﻿using CatsAndPies.Domain.Models.Response;
+using CatsAndPies.Domain.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace CatsAndPies.Domain.Abstractions.Services.Cat
 {
     public interface ICatMessageService
     {
-        Task<BaseResponse<string>> SaySomething(int userId);
+        Task<Result<string>> SaySomething(int userId);
     }
 }

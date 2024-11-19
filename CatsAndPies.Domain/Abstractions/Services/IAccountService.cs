@@ -2,7 +2,7 @@
 using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.Helpres;
-using CatsAndPies.Domain.Response;
+using CatsAndPies.Domain.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;

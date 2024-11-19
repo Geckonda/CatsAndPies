@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatsAndPies.Domain", "CatsA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatsAndPies.Services", "CatsAndPies.Services\CatsAndPies.Services.csproj", "{9ADF14C9-B344-431A-9104-AB58EC8C02C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatsAndPies.Tests", "CatsAndPies.Tests\CatsAndPies.Tests.csproj", "{F1FBA38E-6188-4FCB-BD7D-B4D1F57924DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9ADF14C9-B344-431A-9104-AB58EC8C02C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ADF14C9-B344-431A-9104-AB58EC8C02C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9ADF14C9-B344-431A-9104-AB58EC8C02C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1FBA38E-6188-4FCB-BD7D-B4D1F57924DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1FBA38E-6188-4FCB-BD7D-B4D1F57924DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1FBA38E-6188-4FCB-BD7D-B4D1F57924DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1FBA38E-6188-4FCB-BD7D-B4D1F57924DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

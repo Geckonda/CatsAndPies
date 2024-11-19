@@ -5,7 +5,7 @@ using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Enums;
-using CatsAndPies.Domain.Response;
+using CatsAndPies.Domain.Models.Response;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,6 @@ namespace CatsAndPies.Services.Implementations
                     return new()
                     {
                         MessageForUser = "Нельзя добавить новую анкету. Анкета была создана прежде.",
-                        Description = "Анкета не добавлена. Анкета уже создана",
                         Data = false,
                     };
                 }
@@ -52,7 +51,6 @@ namespace CatsAndPies.Services.Implementations
                     MessageForUser = "Анкета успешно добавлена",
 
                     //Добавить получения пользователя из БД?
-                    Description = $"Пользователь добавил анкету"
                 };
             }
 			catch (Exception ex)
@@ -60,7 +58,6 @@ namespace CatsAndPies.Services.Implementations
                 _logger.LogError(ex, $"[Add questionnaire]: {ex.Message}");
                 return new()
                 {
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось добавить анкету. Что-то пошло не так..."
                 };
@@ -75,7 +72,6 @@ namespace CatsAndPies.Services.Implementations
                 var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(userId);
                 await _questionnaireRepository.Delete(questionnaireId);
                 response.Data = true;
-                response.Description = "Анкета успешно удалена";
                 response.MessageForUser = "Анкета удалена";
                 response.StatusCode = StatusCode.Ok;
                 return response;
@@ -86,7 +82,6 @@ namespace CatsAndPies.Services.Implementations
                 return new()
                 {
                     Data = false,
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось удалить анкету. Что-то пошло не так..."
                 };
@@ -104,7 +99,6 @@ namespace CatsAndPies.Services.Implementations
                     {
                         StatusCode = StatusCode.NotFound,
                         MessageForUser = $"Анкета не найдена",
-                        Description = $"Анкета не найдена"
                     };
                 }
                 var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
@@ -113,7 +107,6 @@ namespace CatsAndPies.Services.Implementations
                     StatusCode = StatusCode.Ok,
                     Data = model,
                     MessageForUser = "Анкета получена",
-                    Description = "Анкета получена"
                 };
             }
             catch (Exception ex)
@@ -122,7 +115,6 @@ namespace CatsAndPies.Services.Implementations
                 {
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось получить анкету, что-то пошло не так...",
-                    Description = "Не удалось получить анкету, что-то пошло не так...",
                 };
             }
         }
@@ -138,7 +130,6 @@ namespace CatsAndPies.Services.Implementations
                     {
                         StatusCode = StatusCode.NotFound,
                         MessageForUser = "Анкета не найдена",
-                        Description = $"Анкета не найдена"
                     };
                 }
                 var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
@@ -147,7 +138,6 @@ namespace CatsAndPies.Services.Implementations
                     StatusCode = StatusCode.Ok,
                     Data = model,
                     MessageForUser = "Анкета получена",
-                    Description = "Анкета получена"
                 };
 
             }
@@ -156,7 +146,6 @@ namespace CatsAndPies.Services.Implementations
                 _logger.LogError(ex, $"[Get questionnaire]: {ex.Message}");
                 return new()
                 {
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось получить анкету. Что-то пошло не так..."
                 };
@@ -174,7 +163,6 @@ namespace CatsAndPies.Services.Implementations
                 response.Data = true;
                 response.StatusCode = StatusCode.Ok;
                 response.MessageForUser = "Анкета обновлена";
-                response.Description = "Анкета успешно обновлена";
                 return response;
             }
             catch (Exception ex)
@@ -183,7 +171,6 @@ namespace CatsAndPies.Services.Implementations
                 return new()
                 {
                     Data = false,
-                    Description = ex.Message,
                     StatusCode = StatusCode.InternalServerError,
                     MessageForUser = "Не удалось обновить анкету. Что-то пошло не так..."
                 };

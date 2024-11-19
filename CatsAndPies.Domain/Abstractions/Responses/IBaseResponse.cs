@@ -12,7 +12,6 @@ namespace CatsAndPies.Domain.Abstractions.Responses
         T? Data { get; set; }
         public StatusCode StatusCode { get; set; }
 
-        public string? Description { get; set; }
         public string? MessageForUser { get; set; }
     }
 }
