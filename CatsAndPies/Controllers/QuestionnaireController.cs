@@ -32,6 +32,7 @@ namespace CatsAndPies.Controllers
         [SwaggerOperation(Summary = "Добавить анкету", Description = "Возвращает true/false.")]
         public async Task<IActionResult> AddQuestionnaire([FromBody]QuestionnaireRequestDto model)
         {
+            _logger.LogInformation("AddQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<bool> response;
             model.UserId = GetUserId();
             var result = await _questionnaireService.Add(model);
@@ -57,6 +58,7 @@ namespace CatsAndPies.Controllers
         [SwaggerOperation(Summary = "Получить анкету", Description = "Возвращает анкету авторизированного пользователя.")]
         public async Task<IActionResult> GetMyQuestionnaire()
         {
+            _logger.LogInformation("GetMyQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<QuestionnaireResponseDto> response;
             var result = await _questionnaireService.GetByUserId(GetUserId());
             if(result.IsSuccess)
@@ -81,6 +83,7 @@ namespace CatsAndPies.Controllers
         [SwaggerOperation(Summary = "Получить анкету по id", Description = "Возвращает анкету конкретного пользователя по его Id.")]
         public async Task<IActionResult> GetUserQuestionnaire(int id)
         {
+            _logger.LogInformation("GetUserQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<QuestionnaireResponseDto> response;
             var result = await _questionnaireService.GetById(id);
             if (result.IsSuccess)
@@ -105,7 +108,7 @@ namespace CatsAndPies.Controllers
         [SwaggerOperation(Summary = "Редактировать анкету (все поля)", Description = "Возвращает true/false.")]
         public async Task<IActionResult> UpdateFullQuestionnaire([FromBody] QuestionnaireRequestDto model)
         {
-
+            _logger.LogInformation("UpdateFullQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<bool> response;
             model.UserId = GetUserId();
             var result = await _questionnaireService.UpdateFull(model);
