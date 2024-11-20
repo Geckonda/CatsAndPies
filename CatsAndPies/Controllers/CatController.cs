@@ -33,7 +33,7 @@ namespace CatsAndPies.Controllers
             try
             {
                 var result = await _catMessageService.SaySomething(GetUserId());
-                if(result.Success)
+                if(result.IsSuccess)
                 {
                     response = new BaseResponse<string>
                     {
@@ -70,7 +70,7 @@ namespace CatsAndPies.Controllers
             {
                 var result = await _catCreationService.CreateCat(name, GetUserId());
 
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     response = new BaseResponse<CatResponseDTO>
                     {

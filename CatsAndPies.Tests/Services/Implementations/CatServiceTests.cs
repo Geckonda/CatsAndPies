@@ -52,7 +52,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var result = await service.CreateCat(name, userId);
 
             // Assert
-            Assert.True(result.Success);
+            Assert.True(result.IsSuccess);
             Assert.NotNull(result.Data);
             //Assert.Equal(name, result.Data.Name);
             //Assert.Equal("Meow!", result.Data.Phrase);
@@ -84,7 +84,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var result = await service.CreateCat("NewCat", userId);
 
             // Assert
-            Assert.False(result.Success);
+            Assert.False(result.IsSuccess);
             mockRepository.Verify(r => r.GetOneByUserId(userId), Times.Once);
             mockRepository.Verify(r => r.Add(It.IsAny<CatEntity>()), Times.Never);
         }
@@ -116,7 +116,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var result = await service.SaySomething(userId);
 
             // Assert
-            Assert.True(result.Success);
+            Assert.True(result.IsSuccess);
             Assert.Equal(expectedMessage, result.Data);
 
             mockRepository.Verify(r => r.GetCatBehaviorByUserId(userId), Times.Once);

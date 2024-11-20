@@ -1,5 +1,6 @@
 
 using CatsAndPies.DAL;
+using CatsAndPies.Domain.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -103,7 +104,7 @@ namespace CatsAndPies
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-           
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

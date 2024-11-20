@@ -6,6 +6,7 @@ using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Enums;
 using CatsAndPies.Domain.Models.Response;
+using CatsAndPies.Domain.Responses;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -29,152 +30,57 @@ namespace CatsAndPies.Services.Implementations
             _questionnaireRepository = repository;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<bool>> Add(QuestionnaireRequestDto model)
+        public async Task<Result<bool>> Add(QuestionnaireRequestDto model)
         {
-			try
-			{
-                var questionnaire = await _questionnaireRepository.GetOneByUserId(model.UserId);
-                if (questionnaire != null)
-                {
-                    return new()
-                    {
-                        MessageForUser = "Нельзя добавить новую анкету. Анкета была создана прежде.",
-                        Data = false,
-                    };
-                }
-                questionnaire = _mapper.Map<QuestionnaireEntity>(model);
-                await _questionnaireRepository.Add(questionnaire);
-                return new()
-                {
-                    StatusCode = StatusCode.Created,
-                    Data = true,
-                    MessageForUser = "Анкета успешно добавлена",
+            var questionnaire = await _questionnaireRepository.GetOneByUserId(model.UserId);
+            if (questionnaire != null)
+                return Result<bool>.ErrorResult();
 
-                    //Добавить получения пользователя из БД?
-                };
-            }
-			catch (Exception ex)
-			{
-                _logger.LogError(ex, $"[Add questionnaire]: {ex.Message}");
-                return new()
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось добавить анкету. Что-то пошло не так..."
-                };
-			}
+            questionnaire = _mapper.Map<QuestionnaireEntity>(model);
+            await _questionnaireRepository.Add(questionnaire);
+            return Result<bool>.SuccessResult(true);
         }
 
-        public async Task<BaseResponse<bool>> DeleteByUserId(int userId)
+        public async Task<Result<bool>> DeleteByUserId(int userId)
         {
-            var response = new BaseResponse<bool>();
-            try
-            {
-                var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(userId);
-                await _questionnaireRepository.Delete(questionnaireId);
-                response.Data = true;
-                response.MessageForUser = "Анкета удалена";
-                response.StatusCode = StatusCode.Ok;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Delete questionnaire]: {ex.Message}");
-                return new()
-                {
-                    Data = false,
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось удалить анкету. Что-то пошло не так..."
-                };
-            }
+            var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(userId);
+            if(questionnaireId == 0)
+                return Result<bool>.ErrorResult();
+
+            await _questionnaireRepository.Delete(questionnaireId);
+            return Result<bool>.SuccessResult(true);
         }
 
-        public async Task<BaseResponse<QuestionnaireResponseDto>> GetById(int id)
+        public async Task<Result<QuestionnaireResponseDto>> GetById(int id)
         {
-            try
-            {
-                var questionnaire = await _questionnaireRepository.GetOneById(id);
-                if (questionnaire == null)
-                {
-                    return new()
-                    {
-                        StatusCode = StatusCode.NotFound,
-                        MessageForUser = $"Анкета не найдена",
-                    };
-                }
-                var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
-                return new()
-                {
-                    StatusCode = StatusCode.Ok,
-                    Data = model,
-                    MessageForUser = "Анкета получена",
-                };
-            }
-            catch (Exception ex)
-            {
-                return new()
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось получить анкету, что-то пошло не так...",
-                };
-            }
+            var questionnaire = await _questionnaireRepository.GetOneById(id);
+            if (questionnaire == null)
+                return Result<QuestionnaireResponseDto>.ErrorResult();
+
+            var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
+            return Result<QuestionnaireResponseDto>.SuccessResult(model);
         }
 
-        public async Task<BaseResponse<QuestionnaireResponseDto>> GetByUserId(int userId)
+        public async Task<Result<QuestionnaireResponseDto>> GetByUserId(int userId)
         {
-            try
-            {
-                var questionnaire = await _questionnaireRepository.GetOneByUserId(userId);
-                if (questionnaire == null)
-                {
-                    return new()
-                    {
-                        StatusCode = StatusCode.NotFound,
-                        MessageForUser = "Анкета не найдена",
-                    };
-                }
-                var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
-                return new()
-                {
-                    StatusCode = StatusCode.Ok,
-                    Data = model,
-                    MessageForUser = "Анкета получена",
-                };
+            var questionnaire = await _questionnaireRepository.GetOneByUserId(userId);
+            if (questionnaire == null)
+                return Result<QuestionnaireResponseDto>.ErrorResult();
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Get questionnaire]: {ex.Message}");
-                return new()
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось получить анкету. Что-то пошло не так..."
-                };
-            }
+            var model = _mapper.Map<QuestionnaireResponseDto>(questionnaire);
+            return Result<QuestionnaireResponseDto>.SuccessResult(model);
         }
 
-        public async Task<BaseResponse<bool>> UpdateFull(QuestionnaireRequestDto model)
+        public async Task<Result<bool>> UpdateFull(QuestionnaireRequestDto model)
         {
-            try
-            {
-                var response = new BaseResponse<bool>();
-                var questionnaire = _mapper.Map<QuestionnaireEntity>(model);
-                questionnaire.Id = await _questionnaireRepository.GetOneIdByUserId(model.UserId);
-                await _questionnaireRepository.Update(questionnaire);
-                response.Data = true;
-                response.StatusCode = StatusCode.Ok;
-                response.MessageForUser = "Анкета обновлена";
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[UpdateFull questionnaire]: {ex.Message}");
-                return new()
-                {
-                    Data = false,
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось обновить анкету. Что-то пошло не так..."
-                };
-            }
+            var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(model.UserId);
+            if(questionnaireId == 0)
+                return Result<bool>.ErrorResult();
+
+            var questionnaire = _mapper.Map<QuestionnaireEntity>(model);
+            questionnaire.Id = questionnaireId;
+            await _questionnaireRepository.Update(questionnaire);
+            return Result<bool>.SuccessResult(true);
         }
     }
 }
