@@ -71,6 +71,7 @@ namespace CatsAndPies.Controllers
                 };
                 return Ok(response);
             }
+            _logger.LogWarning("GetMyQuestionnaire NotFound {Time}", DateTime.UtcNow);
             response = new()
             {
                 StatusCode = Domain.Enums.StatusCode.NotFound,
