@@ -14,6 +14,6 @@ namespace CatsAndPies.Domain.Abstractions.Services
 {
     public interface IAuthenticationService
     {
-        Task<Result<LoginResponseDto>> Authenticate(LoginRequestDto model);
+        Task<Result<LoginResponseDto>> TryAuthenticate(LoginRequestDto model);
     }
 }

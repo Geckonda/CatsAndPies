@@ -35,7 +35,7 @@ namespace CatsAndPies.Controllers
             _logger.LogInformation("AddQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<bool> response;
             model.UserId = GetUserId();
-            var result = await _questionnaireService.Add(model);
+            var result = await _questionnaireService.TryAdd(model);
             if(result.IsSuccess)
             {
                 response = new()
@@ -60,7 +60,7 @@ namespace CatsAndPies.Controllers
         {
             _logger.LogInformation("GetMyQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<QuestionnaireResponseDto> response;
-            var result = await _questionnaireService.GetByUserId(GetUserId());
+            var result = await _questionnaireService.TryGetByUserId(GetUserId());
             if(result.IsSuccess)
             {
                 response = new()
@@ -86,7 +86,7 @@ namespace CatsAndPies.Controllers
         {
             _logger.LogInformation("GetUserQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<QuestionnaireResponseDto> response;
-            var result = await _questionnaireService.GetById(id);
+            var result = await _questionnaireService.TryGetById(id);
             if (result.IsSuccess)
             {
                 response = new()
@@ -112,7 +112,7 @@ namespace CatsAndPies.Controllers
             _logger.LogInformation("UpdateFullQuestionnaire метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<bool> response;
             model.UserId = GetUserId();
-            var result = await _questionnaireService.UpdateFull(model);
+            var result = await _questionnaireService.TryUpdateFull(model);
             if (result.IsSuccess)
             {
                 response = new()
@@ -137,7 +137,7 @@ namespace CatsAndPies.Controllers
         {
             _logger.LogInformation("DeleteQuestionnaireByUserId метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<bool> response;
-            var result = await _questionnaireService.DeleteByUserId(GetUserId());
+            var result = await _questionnaireService.TryDeleteByUserId(GetUserId());
             if(result.IsSuccess)
             {
                 response = new()

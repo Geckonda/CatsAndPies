@@ -12,10 +12,10 @@ namespace CatsAndPies.Domain.Abstractions.Services
 {
     public interface IQuestionnaireService
     {
-        Task<Result<bool>> Add(QuestionnaireRequestDto model);
-        Task<Result<QuestionnaireResponseDto>> GetByUserId(int userId);
-        Task<Result<QuestionnaireResponseDto>> GetById(int id);
-        Task<Result<bool>> UpdateFull(QuestionnaireRequestDto model);
-        Task<Result<bool>> DeleteByUserId(int userId);
+        Task<Result<bool>> TryAdd(QuestionnaireRequestDto model);
+        Task<Result<QuestionnaireResponseDto>> TryGetByUserId(int userId);
+        Task<Result<QuestionnaireResponseDto>> TryGetById(int id);
+        Task<Result<bool>> TryUpdateFull(QuestionnaireRequestDto model);
+        Task<Result<bool>> TryDeleteByUserId(int userId);
     }
 }

@@ -15,8 +15,8 @@ namespace CatsAndPies.Domain.Abstractions.Services
 {
     public interface IAccountService
     {
-        Task<Result<LoginResponseDto>> Register(RegisterRequestDto model);
+        Task<Result<LoginResponseDto>> TryRegister(RegisterRequestDto model);
 
-        Task<Result<LoginResponseDto>> Login(LoginRequestDto model);
+        Task<Result<LoginResponseDto>> TryLogin(LoginRequestDto model);
     }
 }

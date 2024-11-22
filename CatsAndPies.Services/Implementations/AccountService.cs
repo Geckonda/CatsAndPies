@@ -38,17 +38,17 @@ namespace CatsAndPies.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<Result<LoginResponseDto>> Login(LoginRequestDto model)
+        public async Task<Result<LoginResponseDto>> TryLogin(LoginRequestDto model)
         {
-            return await _authService.Authenticate(model);
+            return await _authService.TryAuthenticate(model);
         }
 
-        public async Task<Result<LoginResponseDto>> Register(RegisterRequestDto model)
+        public async Task<Result<LoginResponseDto>> TryRegister(RegisterRequestDto model)
         {
-            var result = await _userService.RegisterUser(model);
+            var result = await _userService.TryRegisterUser(model);
             if(!result.IsSuccess)
                 return  Result<LoginResponseDto>.ErrorResult();
-            return await _authService.Authenticate(_mapper.Map<LoginRequestDto>(model));
+            return await _authService.TryAuthenticate(_mapper.Map<LoginRequestDto>(model));
         }
     }
 }

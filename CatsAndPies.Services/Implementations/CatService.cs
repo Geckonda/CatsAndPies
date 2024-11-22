@@ -32,7 +32,7 @@ namespace CatsAndPies.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<Result<CatResponseDTO?>> CreateCat(string name, int userId)
+        public async Task<Result<CatResponseDTO?>> TryCreateCat(string name, int userId)
         {
             var entity = await _catRepository.GetOneByUserId(userId);
             if (entity != null)
@@ -56,7 +56,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<CatResponseDTO?>.SuccessResult(model);
         }
 
-        public async Task<Result<CatResponseWithoutOwnerDTO?>> GetCatWithoutOwnerByUserId(int userId)
+        public async Task<Result<CatResponseWithoutOwnerDTO?>> TryGetCatWithoutOwnerByUserId(int userId)
         {
             var entity = await _catRepository.GetOneByUserId(userId);
             if(entity == null)
@@ -68,7 +68,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<CatResponseWithoutOwnerDTO?>.SuccessResult(catDTO);
         }
 
-        public async Task<Result<string>> SaySomething(int userId)
+        public async Task<Result<string>> TrySaySomething(int userId)
         {
             var personalityId = await _catRepository.GetCatBehaviorByUserId(userId);
             if(personalityId == 0)

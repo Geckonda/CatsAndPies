@@ -33,9 +33,9 @@ namespace CatsAndPies.Services.Implementations
             _tokenService = tokenService;
         }
 
-        public async Task<Result<LoginResponseDto>> Authenticate(LoginRequestDto model)
+        public async Task<Result<LoginResponseDto>> TryAuthenticate(LoginRequestDto model)
         {
-            var userResult = await _userService.GetUserByLogin(model.Login);
+            var userResult = await _userService.TryGetUserByLogin(model.Login);
             if (!userResult.IsSuccess)
                 return Result<LoginResponseDto>.ErrorResult();
 
@@ -45,7 +45,7 @@ namespace CatsAndPies.Services.Implementations
 
             var token = _tokenService.GenerateJwtToken(user);
 
-            var catResult = await _catService.GetCatWithoutOwnerByUserId(user.Id);
+            var catResult = await _catService.TryGetCatWithoutOwnerByUserId(user.Id);
 
             LoginResponseDto data = new LoginResponseDto
             {

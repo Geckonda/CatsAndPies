@@ -49,7 +49,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var service = new CatService(mockRepository.Object, mockFactory.Object, mockMapper.Object);
 
             // Act
-            var result = await service.CreateCat(name, userId);
+            var result = await service.TryCreateCat(name, userId);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -81,7 +81,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var service = new CatService(mockRepository.Object, mockFactory.Object, mockMapper.Object);
 
             // Act
-            var result = await service.CreateCat("NewCat", userId);
+            var result = await service.TryCreateCat("NewCat", userId);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -113,7 +113,7 @@ namespace CatsAndPies.Tests.Services.Implementations
             var service = new CatService(mockRepository.Object, mockFactory.Object, Mock.Of<IMapper>());
 
             // Act
-            var result = await service.SaySomething(userId);
+            var result = await service.TrySaySomething(userId);
 
             // Assert
             Assert.True(result.IsSuccess);

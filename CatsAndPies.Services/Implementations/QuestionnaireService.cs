@@ -30,7 +30,7 @@ namespace CatsAndPies.Services.Implementations
             _questionnaireRepository = repository;
             _mapper = mapper;
         }
-        public async Task<Result<bool>> Add(QuestionnaireRequestDto model)
+        public async Task<Result<bool>> TryAdd(QuestionnaireRequestDto model)
         {
             var questionnaire = await _questionnaireRepository.GetOneByUserId(model.UserId);
             if (questionnaire != null)
@@ -41,7 +41,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<bool>.SuccessResult(true);
         }
 
-        public async Task<Result<bool>> DeleteByUserId(int userId)
+        public async Task<Result<bool>> TryDeleteByUserId(int userId)
         {
             var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(userId);
             if(questionnaireId == 0)
@@ -51,7 +51,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<bool>.SuccessResult(true);
         }
 
-        public async Task<Result<QuestionnaireResponseDto>> GetById(int id)
+        public async Task<Result<QuestionnaireResponseDto>> TryGetById(int id)
         {
             var questionnaire = await _questionnaireRepository.GetOneById(id);
             if (questionnaire == null)
@@ -61,7 +61,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<QuestionnaireResponseDto>.SuccessResult(model);
         }
 
-        public async Task<Result<QuestionnaireResponseDto>> GetByUserId(int userId)
+        public async Task<Result<QuestionnaireResponseDto>> TryGetByUserId(int userId)
         {
             var questionnaire = await _questionnaireRepository.GetOneByUserId(userId);
             if (questionnaire == null)
@@ -71,7 +71,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<QuestionnaireResponseDto>.SuccessResult(model);
         }
 
-        public async Task<Result<bool>> UpdateFull(QuestionnaireRequestDto model)
+        public async Task<Result<bool>> TryUpdateFull(QuestionnaireRequestDto model)
         {
             var questionnaireId = await _questionnaireRepository.GetOneIdByUserId(model.UserId);
             if(questionnaireId == 0)

@@ -21,7 +21,7 @@ namespace CatsAndPies.Services.Implementations
         {
             _userRepository = userRepository;
         }
-        public async Task<Result<UserEntity?>> GetUserByLogin(string login)
+        public async Task<Result<UserEntity?>> TryGetUserByLogin(string login)
         {
             var user = await _userRepository.GetOneByLogin(login);
             if (user == null)
@@ -29,7 +29,7 @@ namespace CatsAndPies.Services.Implementations
             return Result<UserEntity?>.SuccessResult(user);
         }
 
-        public async Task<Result<bool>> RegisterUser(RegisterRequestDto model)
+        public async Task<Result<bool>> TryRegisterUser(RegisterRequestDto model)
         {
             var user = await _userRepository.GetOneByLogin(model.Login);
             if (user != null)

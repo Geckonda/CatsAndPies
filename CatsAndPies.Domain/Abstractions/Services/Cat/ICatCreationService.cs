@@ -14,6 +14,6 @@ namespace CatsAndPies.Domain.Abstractions.Services.Cat
     /// </summary>
     public interface ICatCreationService
     {
-        Task<Result<CatResponseDTO?>> CreateCat(string name, int userId);
+        Task<Result<CatResponseDTO?>> TryCreateCat(string name, int userId);
     }
 }

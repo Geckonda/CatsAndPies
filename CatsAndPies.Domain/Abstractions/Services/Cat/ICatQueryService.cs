@@ -13,6 +13,6 @@ namespace CatsAndPies.Domain.Abstractions.Services.Cat
     /// </summary>
     public interface ICatQueryService
     {
-        public Task<Result<CatResponseWithoutOwnerDTO?>> GetCatWithoutOwnerByUserId(int  userId);
+        public Task<Result<CatResponseWithoutOwnerDTO?>> TryGetCatWithoutOwnerByUserId(int  userId);
     }
 }

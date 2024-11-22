@@ -11,7 +11,7 @@ namespace CatsAndPies.Domain.Abstractions.Services
 {
     public interface IUserService
     {
-        Task<Result<UserEntity?>> GetUserByLogin(string login);
-        Task<Result<bool>> RegisterUser(RegisterRequestDto model);
+        Task<Result<UserEntity?>> TryGetUserByLogin(string login);
+        Task<Result<bool>> TryRegisterUser(RegisterRequestDto model);
     }
 }

@@ -27,7 +27,7 @@ namespace CatsAndPies.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
             BaseResponse<LoginResponseDto> response;
-            var result = await _accountService.Login(model);
+            var result = await _accountService.TryLogin(model);
             if(result.IsSuccess)
             {
                 response = new()
@@ -51,7 +51,7 @@ namespace CatsAndPies.Controllers
         public async Task<IActionResult> Registration([FromBody] RegisterRequestDto model)
         {
             BaseResponse<LoginResponseDto> response;
-            var result = await _accountService.Register(model);
+            var result = await _accountService.TryRegister(model);
             if (result.IsSuccess)
             {
                 response = new()

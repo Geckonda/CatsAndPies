@@ -13,6 +13,6 @@ namespace CatsAndPies.Domain.Abstractions.Services.Cat
     /// </summary>
     public interface ICatMessageService
     {
-        Task<Result<string>> SaySomething(int userId);
+        Task<Result<string>> TrySaySomething(int userId);
     }
 }
