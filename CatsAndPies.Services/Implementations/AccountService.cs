@@ -10,6 +10,7 @@ using CatsAndPies.Domain.Enums;
 using CatsAndPies.Domain.Factories;
 using CatsAndPies.Domain.Helpres;
 using CatsAndPies.Domain.Models.Response;
+using CatsAndPies.Domain.Responses;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -25,144 +26,29 @@ namespace CatsAndPies.Services.Implementations
 {
     public class AccountService : IAccountService
     {
-        private readonly ILogger<AccountService> _logger;
-        private readonly IUserRepository _userRepository;
-
-        public readonly ICatRepository _catRepository;
-        public readonly CatFactory _catFactory;
+        private readonly IAuthenticationService _authService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public AccountService(IUserRepository userRepository,
-            ILogger<AccountService> logger,
-            ICatRepository catRepository,
-            CatFactory catFactory,
+        public AccountService(IAuthenticationService authService,
+            IUserService userService,
             IMapper mapper)
         {
-            _userRepository = userRepository;
-            _logger = logger;
-            _catRepository = catRepository;
-            _catFactory = catFactory;
+            _authService = authService;
+            _userService = userService;
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<LoginResponseDto>> Login(LoginRequestDto model)
+        public async Task<Result<LoginResponseDto>> Login(LoginRequestDto model)
         {
-            try
-            {
-                var user = await _userRepository.GetOneByLogin(model.Login);
-
-                if (user == null || user.Password != HashPasswordHelper.HashPassword(model.Password))
-                {
-                    return new()
-                    {
-                        StatusCode = StatusCode.Unauthorized,
-                        MessageForUser = "Логин или пароль указаны неверно",
-                    };
-                }
-
-                var entity = await _catRepository.GetOneByUserId(user.Id);
-                CatResponseWithoutOwnerDTO? catDTO = null;
-                if (entity != null)
-                {
-                    var cat = _catFactory.CreateCatWithCertainBehavior(entity.PersonalityId);
-                    catDTO = _mapper.Map<CatResponseWithoutOwnerDTO>(entity);
-                    catDTO.Phrase = "Мяу";
-                }
-
-                var result = new LoginResponseDto()
-                {
-                    Name = user.Name,
-                    Login = user.Login,
-                    Cat = catDTO,
-                    Token = Authenticate(user)
-                };
-                return new()
-                {
-                    StatusCode = StatusCode.Ok,
-                    Data = result,
-                    MessageForUser = "Авторизация прошла успешно!"
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Login]: {ex.Message}]");
-                return new ()
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось авторизироваться. Что-то пошло не так..."
-                };
-            }
+            return await _authService.Authenticate(model);
         }
 
-        public async Task<BaseResponse<LoginResponseDto>> Register(RegisterRequestDto model)
+        public async Task<Result<LoginResponseDto>> Register(RegisterRequestDto model)
         {
-            try
-            {
-                var user = await _userRepository.GetOneByLogin(model.Login);
-                if (user != null)
-                    return new BaseResponse<LoginResponseDto>
-                    {
-                        StatusCode = StatusCode.Conflict,
-                        MessageForUser = "Пользователь с таким логином же зарегистрирован",
-                    };
-
-                user = new UserEntity()
-                {
-                    RoleId = (int)RoleCode.User,
-                    Name = model.Name,
-                    Login = model.Login,
-                    Password = HashPasswordHelper.HashPassword(model.Password),
-                };
-                await _userRepository.Add(user);
-                user.Role = new()
-                {
-                    Id = (int)RoleCode.User,
-                    Name = "User"
-                };
-                var result = new LoginResponseDto()
-                {
-                    Name = user.Name,
-                    Login = user.Login,
-                    Token = Authenticate(user)
-                };
-                return new()
-                {
-                    StatusCode = StatusCode.Created,
-                    Data = result,
-                    MessageForUser = "Регистрация прошла успешно",
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"[Register]: {ex.Message}]");
-                return new()
-                {
-                    StatusCode = StatusCode.InternalServerError,
-                    MessageForUser = "Не удалось зарегистрироваться. Что-то пошло не так..."
-                };
-            }
+            var result = await _userService.RegisterUser(model);
+            if(!result.IsSuccess)
+                return  Result<LoginResponseDto>.ErrorResult();
+            return await _authService.Authenticate(_mapper.Map<LoginRequestDto>(model));
         }
-        public TokenResult Authenticate(UserEntity user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("ThisIsMySuperSecretKeyForJwtToken1234567890");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.Login),
-                        new Claim(ClaimTypes.Role, user.Role!.Name)
-                    }),
-                Expires = DateTime.UtcNow.AddHours(12),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return new()
-            {
-                Token = tokenHandler.WriteToken(token),
-                ExpiresIn = tokenDescriptor.Expires
-            };
-        }
-
     }
 }

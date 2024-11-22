@@ -8,6 +8,8 @@ using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.DTO.Request;
 using CatsAndPies.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
+using CatsAndPies.Domain.DTO.Response;
+using CatsAndPies.Domain.Models.Response;
 
 namespace CatsAndPies.Controllers
 {
@@ -24,18 +26,48 @@ namespace CatsAndPies.Controllers
         [SwaggerOperation(Summary = "Авторизация", Description = "Возвращает имя, логин и токен авторизированного пользователя.")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            var response = await _accountService.Login(model);
-            if(response.StatusCode == Domain.Enums.StatusCode.Ok)
-                return Ok(response);
-            return Unauthorized();
+            BaseResponse<LoginResponseDto> response;
+            var result = await _accountService.Login(model);
+            if(result.IsSuccess)
+            {
+                response = new()
+                {
+                    StatusCode = Domain.Enums.StatusCode.Ok,
+                    Data = result.Data,
+                    MessageForUser = "Авторизация прошла успешно."
+                };
+                return Ok(result.Data);
+            }
+            response = new()
+            {
+                StatusCode = Domain.Enums.StatusCode.Unauthorized,
+                Data = result.Data,
+                MessageForUser = "Введены неверные данные."
+            };
+            return Unauthorized(response);
         }
         [HttpPost("Registration")]
         [SwaggerOperation(Summary = "Регистрация", Description = "Возвращает имя, логин и токен авторизированного пользователя.")]
         public async Task<IActionResult> Registration([FromBody] RegisterRequestDto model)
         {
-            var response = await _accountService.Register(model);
-            if (response.StatusCode == Domain.Enums.StatusCode.Created)
+            BaseResponse<LoginResponseDto> response;
+            var result = await _accountService.Register(model);
+            if (result.IsSuccess)
+            {
+                response = new()
+                {
+                    StatusCode = Domain.Enums.StatusCode.Ok,
+                    Data = result.Data,
+                    MessageForUser = "Регистрация прошла успешно."
+                };
                 return CreatedAtAction("Registration", response);
+            }
+            response = new()
+            {
+                StatusCode = Domain.Enums.StatusCode.Conflict,
+                Data = result.Data,
+                MessageForUser = "Пользователь с таким логином же зарегистрирован",
+            };
             return Conflict(response);
         }
     }

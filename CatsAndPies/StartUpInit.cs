@@ -21,12 +21,21 @@ namespace CatsAndPies
 
         public static void InitialiseServices(this IServiceCollection services)
         {
+            // Сервис токенов
+            services.AddScoped<ITokenService, TokenService>();
+            // Сервисы связанные с аккаунтом
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddScoped<IQuestionnaireService, QuestionnaireService>();
 
-            //Сервисы кота
-            services.AddScoped<ICatCreationService, CatService>();
-            services.AddScoped<ICatMessageService, CatService>();
+            // Сервисы кота
+            services.AddScoped<ICatService, CatService>();
+
+
+
+            
         }
         public static void InitialiseMappers(this IServiceCollection services)
         {

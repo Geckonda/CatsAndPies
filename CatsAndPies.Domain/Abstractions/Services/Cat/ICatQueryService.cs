@@ -1,5 +1,4 @@
 ﻿using CatsAndPies.Domain.DTO.Response.Cat;
-using CatsAndPies.Domain.Models.Response;
 using CatsAndPies.Domain.Responses;
 using System;
 using System.Collections.Generic;
@@ -10,10 +9,10 @@ using System.Threading.Tasks;
 namespace CatsAndPies.Domain.Abstractions.Services.Cat
 {
     /// <summary>
-    /// Отвечает за создание котов
+    /// Отвечает за операции чтения данных, такие как получение информации о котах.
     /// </summary>
-    public interface ICatCreationService
+    public interface ICatQueryService
     {
-        Task<Result<CatResponseDTO?>> CreateCat(string name, int userId);
+        public Task<Result<CatResponseWithoutOwnerDTO?>> GetCatWithoutOwnerByUserId(int  userId);
     }
 }

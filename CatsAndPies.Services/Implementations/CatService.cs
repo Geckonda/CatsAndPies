@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatsAndPies.Domain.Abstractions.Repositories.Combined;
+using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.Abstractions.Services.Cat;
 using CatsAndPies.Domain.DTO.Response;
 using CatsAndPies.Domain.DTO.Response.Cat;
@@ -17,7 +18,7 @@ using System.Xml.Linq;
 
 namespace CatsAndPies.Services.Implementations
 {
-    public class CatService : ICatCreationService, ICatMessageService
+    public class CatService : ICatService
     {
         public readonly ICatRepository _catRepository;
         public readonly CatFactory _catFactory;
@@ -53,6 +54,18 @@ namespace CatsAndPies.Services.Implementations
             var model = _mapper.Map<CatResponseDTO>(entity);
             model.Phrase = cat.SayHelloToNewOwner();
             return Result<CatResponseDTO?>.SuccessResult(model);
+        }
+
+        public async Task<Result<CatResponseWithoutOwnerDTO?>> GetCatWithoutOwnerByUserId(int userId)
+        {
+            var entity = await _catRepository.GetOneByUserId(userId);
+            if(entity == null)
+                return Result<CatResponseWithoutOwnerDTO?>.ErrorResult();
+
+            var cat = _catFactory.CreateCatWithCertainBehavior(entity.PersonalityId);
+            CatResponseWithoutOwnerDTO catDTO = _mapper.Map<CatResponseWithoutOwnerDTO>(entity);
+            catDTO.Phrase = "Мяу";
+            return Result<CatResponseWithoutOwnerDTO?>.SuccessResult(catDTO);
         }
 
         public async Task<Result<string>> SaySomething(int userId)

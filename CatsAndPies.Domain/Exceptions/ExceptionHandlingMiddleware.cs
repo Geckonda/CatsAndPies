@@ -35,7 +35,7 @@ namespace CatsAndPies.Domain.Exceptions
                 {
                     StatusCode = StatusCode.InternalServerError,
                     Data = null,
-                    MessageForUser = "An unexpected error occurred."
+                    MessageForUser = "Что-то пошло не так. Попробуйте позже"
                 };
 
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;

@@ -17,6 +17,7 @@ namespace CatsAndPies.Services.Mapping
             CreateMap<UserEntity, LoginRequestDto>().ReverseMap();
             CreateMap<UserEntity, LoginResponseDto>().ReverseMap();
             CreateMap<UserEntity, RegisterRequestDto>().ReverseMap();
+            CreateMap<LoginRequestDto, RegisterRequestDto>().ReverseMap();
         }
     }
 }

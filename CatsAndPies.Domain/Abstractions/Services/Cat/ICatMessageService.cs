@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace CatsAndPies.Domain.Abstractions.Services.Cat
 {
+    /// <summary>
+    /// Отвечает за логику сообщений
+    /// </summary>
     public interface ICatMessageService
     {
         Task<Result<string>> SaySomething(int userId);
