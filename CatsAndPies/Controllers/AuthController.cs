@@ -36,7 +36,7 @@ namespace CatsAndPies.Controllers
                     Data = result.Data,
                     MessageForUser = "Авторизация прошла успешно."
                 };
-                return Ok(result.Data);
+                return Ok(response);
             }
             response = new()
             {

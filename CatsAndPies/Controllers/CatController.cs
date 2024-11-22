@@ -1,4 +1,5 @@
-﻿using CatsAndPies.Domain.Abstractions.Services.Cat;
+﻿using CatsAndPies.Domain.Abstractions.Services;
+using CatsAndPies.Domain.Abstractions.Services.Cat;
 using CatsAndPies.Domain.DTO.Response.Cat;
 using CatsAndPies.Domain.Models.Response;
 using CatsAndPies.Domain.Responses;
@@ -16,14 +17,11 @@ namespace CatsAndPies.Controllers
     [SwaggerTag("Работа с котом.")]
     public class CatController : Controller
     {
-        private readonly ICatCreationService _catCreationService;
-        private readonly ICatMessageService _catMessageService;
+        private readonly ICatService _catService;
         private int GetUserId() => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        public CatController(ICatCreationService catCreationService,
-            ICatMessageService catMessageService)
+        public CatController(ICatService catService)
         {
-            _catCreationService = catCreationService;
-            _catMessageService = catMessageService;
+            _catService = catService;
         }
         [HttpGet("SaySomething")]
         [SwaggerOperation(Summary = "Получить случайное сообщение от кота", Description = "Data - содержит строку \"что сказал кот\".")]
@@ -32,7 +30,7 @@ namespace CatsAndPies.Controllers
             BaseResponse<string> response;
             try
             {
-                var result = await _catMessageService.TrySaySomething(GetUserId());
+                var result = await _catService.TrySaySomething(GetUserId());
                 if(result.IsSuccess)
                 {
                     response = new BaseResponse<string>
@@ -63,12 +61,12 @@ namespace CatsAndPies.Controllers
 
         [HttpPost("CreateCat")]
         [SwaggerOperation(Summary = "Создать кота", Description = "Data - содержит информацю о созданном коте.")]
-        public async Task<IActionResult> CreateCat(string name)
+        public async Task<IActionResult> CreateCat([FromBody] string name)
         {
             BaseResponse<CatResponseDTO> response;
             try
             {
-                var result = await _catCreationService.TryCreateCat(name, GetUserId());
+                var result = await _catService.TryCreateCat(name, GetUserId());
 
                 if (result.IsSuccess)
                 {
