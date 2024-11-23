@@ -17,6 +17,9 @@ namespace CatsAndPies.DAL.Configurations
             builder.Property(x => x.Name)
                 .HasColumnType("varchar(100)")
                 .IsRequired();
+            builder.Property(x => x.HexColor)
+                .HasColumnType("varchar(6)")
+                .IsRequired();
             builder
                 .HasMany(x => x.Cats)
                 .WithOne(c => c.Color)
@@ -26,24 +29,32 @@ namespace CatsAndPies.DAL.Configurations
                 new CatsColorEntity()
                 {
                     Id = 1,
-                    Name = "Белый"
+                    Name = "Белый",
+                    HexColor = "FFFFFF"
                 },
                 new CatsColorEntity()
                 {
                     Id = 2,
-                    Name = "Черный"
-                }, new CatsColorEntity()
+                    Name = "Черный",
+                    HexColor = "000000"
+                },
+                new CatsColorEntity()
                 {
                     Id = 3,
-                    Name = "Рыжий"
-                }, new CatsColorEntity()
+                    Name = "Рыжий",
+                    HexColor = "D2691E"
+                },
+                new CatsColorEntity()
                 {
                     Id = 4,
-                    Name = "Серый"
-                }, new CatsColorEntity()
+                    Name = "Серый",
+                    HexColor = "A9A9A9"
+                },
+                new CatsColorEntity()
                 {
                     Id = 5,
-                    Name = "Шоколадный"
+                    Name = "Шоколадный",
+                    HexColor = "7B3F00"
                 });
         }
     }
