@@ -29,7 +29,7 @@ namespace CatsAndPies.Domain.Exceptions
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception caught in middleware. Path: {Path}", context.Request.Path);
+                //_logger.LogError(ex, "Exception caught in middleware. Path: {Path}", context.Request.Path);
                 _logger.LogError(ex.Message);
 
                 var response = new BaseResponse<object>
