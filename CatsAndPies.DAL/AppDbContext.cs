@@ -19,6 +19,7 @@ namespace CatsAndPies.DAL
         }
         public DbSet<RoleEntity> Roles => Set<RoleEntity>();
         public DbSet<UserEntity> Users => Set<UserEntity>();
+        public DbSet<WalletEntity> Wallets => Set<WalletEntity>();
         public DbSet<QuestionnaireEntity> Questionnairies => Set<QuestionnaireEntity>();
         public DbSet<CatEntity> Cats => Set<CatEntity>();
         public DbSet<CatsColorEntity> CatsColors => Set<CatsColorEntity>();
@@ -28,6 +29,7 @@ namespace CatsAndPies.DAL
         {
             modelBuilder.ApplyConfiguration(new RolesConfiguration());
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletConfigurationEntity());
             modelBuilder.ApplyConfiguration(new QuestionnairiesConfiguration());
             modelBuilder.ApplyConfiguration(new CatsConfiguration());
             modelBuilder.ApplyConfiguration(new CatsColorsConfiguration());

@@ -15,6 +15,7 @@ namespace CatsAndPies
         public static void InitialiseRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
             services.AddScoped<ICatRepository, CatRepository>();
         }

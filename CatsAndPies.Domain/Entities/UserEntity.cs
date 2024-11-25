@@ -16,5 +16,6 @@ namespace CatsAndPies.Domain.Entities
         public RoleEntity? Role { get; set; }
         public QuestionnaireEntity? Questionnaire { get; set; }
         public CatEntity? Cat { get; set; }
+        public WalletEntity? Wallet { get; set; }
     }
 }
