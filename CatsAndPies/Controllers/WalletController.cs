@@ -23,9 +23,9 @@ namespace CatsAndPies.Controllers
         [HttpGet("GetBalance")]
         public async Task<IActionResult> GetBalance()
         {
-            BaseResponse<decimal> response;
+           
             var result = await _walletService.GetBalance(GetUserId());
-            response = new()
+            BaseResponse<decimal> response = new()
             {
                 Data = result,
                 StatusCode = Domain.Enums.StatusCode.Ok,
