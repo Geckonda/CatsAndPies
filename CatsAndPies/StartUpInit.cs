@@ -27,6 +27,7 @@ namespace CatsAndPies
             // Сервисы связанные с аккаунтом
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IQuestionnaireService, QuestionnaireService>();
