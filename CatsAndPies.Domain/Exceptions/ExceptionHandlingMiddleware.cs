@@ -1,4 +1,5 @@
 ﻿using CatsAndPies.Domain.Enums;
+using CatsAndPies.Domain.Exceptions.Items;
 using CatsAndPies.Domain.Models.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -23,16 +24,32 @@ namespace CatsAndPies.Domain.Exceptions
 
         public async Task InvokeAsync(HttpContext context)
         {
+            BaseResponse<object> response;
             try
             {
                 await _next(context);
+            }
+            catch(RequestHandlingException ex)
+            {
+                response = new()
+                {
+                    StatusCode = ex.StatusCode,
+                    MessageForUser = ex.MessageForUser,
+                };
+                if (ex.AdditionalData != null)
+                    response.Data = ex.AdditionalData;
+
+                context.Response.StatusCode = (int)ex.StatusCode;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(response);
             }
             catch (Exception ex)
             {
                 //_logger.LogError(ex, "Exception caught in middleware. Path: {Path}", context.Request.Path);
                 _logger.LogError(ex.Message);
 
-                var response = new BaseResponse<object>
+                response = new()
                 {
                     StatusCode = StatusCode.InternalServerError,
                     Data = null,
