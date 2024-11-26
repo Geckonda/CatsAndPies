@@ -33,5 +33,22 @@ namespace CatsAndPies.Controllers
             };
             return Ok(response);
         }
+        [HttpPost("TransferMoney")]
+        public async Task<IActionResult> TransferMoney(int userIdTo, decimal sum)
+        {
+            var userIdFrom = GetUserId();
+            var result = await _walletService.TryTransferMoney(userIdFrom, userIdTo, sum);
+            if(result.IsSuccess)
+            {
+                BaseResponse<bool> response = new()
+                {
+                    StatusCode = Domain.Enums.StatusCode.Ok,
+                    Data = result.Data,
+                    MessageForUser = "Средства успешно переведены"
+                };
+                return Ok(response);
+            }
+            return BadRequest();
+        }
     }
 }

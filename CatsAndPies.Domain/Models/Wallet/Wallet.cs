@@ -18,11 +18,12 @@ namespace CatsAndPies.Domain.Models.Wallet
                 throw new ArgumentException("Сумма должна быть положительной.");
             Balance += amount;
         }
-        public void Withdraw(decimal amount)
+        public decimal Withdraw(decimal amount)
         {
             if (Balance <= 0)
                 throw new InvalidOperationException("Недостаточно средств на кошельке.");
             Balance -= amount;
+            return Balance;
         }
     }
 }

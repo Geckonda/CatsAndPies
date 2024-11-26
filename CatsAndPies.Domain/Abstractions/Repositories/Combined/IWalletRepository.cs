@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CatsAndPies.Domain.Abstractions.Repositories.Combined
 {
-    public interface IWalletRepository : IBaseRepository<WalletEntity>
+    public interface IWalletRepository : IBaseRepository<WalletEntity>, IUserOwnedRepository<WalletEntity>
     {
         public Task<decimal> GetBalanceByUserId(int userId);
     }

@@ -45,6 +45,7 @@ namespace CatsAndPies
             {
                 cfg.AddProfile<QuestionnaireMappingProfile>();
                 cfg.AddProfile<UserMappingProfile>();
+                cfg.AddProfile<WalletMappingProfile>();
                 cfg.AddProfile<CatMappingProfile>();
             });
         }

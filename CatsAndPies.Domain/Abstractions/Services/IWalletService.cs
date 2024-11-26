@@ -10,5 +10,6 @@ namespace CatsAndPies.Domain.Abstractions.Services
     public interface IWalletService
     {
         Task<decimal> GetBalance(int userId);
+        Task<Result<bool>> TryTransferMoney(int userIdFrom, int userIdTo, decimal sum);
     }
 }

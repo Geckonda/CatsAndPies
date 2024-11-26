@@ -44,6 +44,13 @@ namespace CatsAndPies.DAL.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<WalletEntity?> GetOneByUserId(int userId)
+        {
+            return await _db.Wallets
+                .Where(x => x.UserId == userId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task Update(WalletEntity entity)
         {
             await _db.Wallets
