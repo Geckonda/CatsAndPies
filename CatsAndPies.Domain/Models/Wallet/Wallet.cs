@@ -20,7 +20,7 @@ namespace CatsAndPies.Domain.Models.Wallet
         }
         public void Withdraw(decimal amount)
         {
-            if (amount <= 0)
+            if (Balance <= 0)
                 throw new InvalidOperationException("Недостаточно средств на кошельке.");
             Balance -= amount;
         }
