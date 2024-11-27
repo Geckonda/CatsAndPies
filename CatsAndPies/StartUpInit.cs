@@ -5,6 +5,7 @@ using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.Abstractions.Services.Cat;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Factories;
+using CatsAndPies.Domain.Helpres;
 using CatsAndPies.Services.Implementations;
 using CatsAndPies.Services.Mapping;
 
@@ -23,6 +24,8 @@ namespace CatsAndPies
 
         public static void InitialiseServices(this IServiceCollection services)
         {
+            // Логгирование
+            services.AddSingleton<LogQueueService>();
             // Сервис токенов
             services.AddScoped<ITokenService, TokenService>();
             // Сервисы связанные с аккаунтом
