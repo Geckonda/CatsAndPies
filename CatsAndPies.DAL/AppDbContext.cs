@@ -17,6 +17,7 @@ namespace CatsAndPies.DAL
         {
             
         }
+        public DbSet<ExceptionLogEntity> Errors => Set<ExceptionLogEntity>();
         public DbSet<RoleEntity> Roles => Set<RoleEntity>();
         public DbSet<UserEntity> Users => Set<UserEntity>();
         public DbSet<WalletEntity> Wallets => Set<WalletEntity>();
@@ -27,6 +28,7 @@ namespace CatsAndPies.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new ExceptionLogsConfiguration());
             modelBuilder.ApplyConfiguration(new RolesConfiguration());
             modelBuilder.ApplyConfiguration(new UsersConfiguration());
             modelBuilder.ApplyConfiguration(new WalletConfigurationEntity());
