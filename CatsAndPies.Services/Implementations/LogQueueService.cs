@@ -1,5 +1,6 @@
 ﻿using CatsAndPies.Domain.Abstractions.Repositories;
 using CatsAndPies.Domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace CatsAndPies.Services.Implementations
     public class LogQueueService
     {
         private readonly ConcurrentQueue<ExceptionLogEntity> _logQueue = new();
-        private readonly IBaseRepository<ExceptionLogEntity> _logger;
+        private readonly IServiceProvider _serviceProvider; // Внедрение IServiceProvider
         private readonly SemaphoreSlim _signal = new(0);
 
-        public LogQueueService(IBaseRepository<ExceptionLogEntity> logger)
+        public LogQueueService(IServiceProvider serviceProvider)
         {
-            _logger = logger;
+            _serviceProvider = serviceProvider;
             StartProcessing();
         }
 
@@ -38,7 +39,12 @@ namespace CatsAndPies.Services.Implementations
                     {
                         try
                         {
-                            await _logger.Add(log); // Пишем в базу данных
+                            // Создаём новый Scope для работы с репозиторием
+                            using var scope = _serviceProvider.CreateScope();
+                            var logger = scope.ServiceProvider.GetRequiredService<IBaseRepository<ExceptionLogEntity>>();
+
+                            // Записываем лог в базу данных
+                            await logger.Add(log);
                         }
                         catch (Exception ex)
                         {
@@ -49,5 +55,6 @@ namespace CatsAndPies.Services.Implementations
             });
         }
     }
+
 
 }
