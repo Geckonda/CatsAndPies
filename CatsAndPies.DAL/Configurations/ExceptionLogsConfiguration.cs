@@ -16,6 +16,7 @@ namespace CatsAndPies.DAL.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.ExceptionTime)
+                .HasColumnType("timestamp") // Указываем тип TIMESTAMP без временной зоны
                 .IsRequired();
 
             builder.Property(x => x.ExceptionType)
