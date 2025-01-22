@@ -4,6 +4,7 @@ using CatsAndPies.Domain.Abstractions.Repositories.Combined;
 using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.Abstractions.Services.Cat;
 using CatsAndPies.Domain.Entities;
+using CatsAndPies.Domain.Entities.PiesTables;
 using CatsAndPies.Domain.Factories;
 using CatsAndPies.Services.Implementations;
 using CatsAndPies.Services.Mapping;
@@ -18,6 +19,7 @@ namespace CatsAndPies
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
             services.AddScoped<ICatRepository, CatRepository>();
+            services.AddScoped<IPieRepository, PieRepository>();
         }
 
         public static void InitialiseServices(this IServiceCollection services)
@@ -35,8 +37,8 @@ namespace CatsAndPies
             // Сервисы кота
             services.AddScoped<ICatService, CatService>();
 
-
-
+            // Сервисы пирожков
+            services.AddScoped<IPieService, PieService>();
             
         }
         public static void InitialiseMappers(this IServiceCollection services)
