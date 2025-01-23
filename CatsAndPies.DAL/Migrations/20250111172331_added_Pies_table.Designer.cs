@@ -3,6 +3,7 @@ using System;
 using CatsAndPies.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CatsAndPies.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250111172331_added_Pies_table")]
+    partial class added_Pies_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,35 +155,7 @@ namespace CatsAndPies.DAL.Migrations
                         });
                 });
 
-              modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEntity", b =>
-                              {
-                                  b.Property<int>("Id")
-                                      .ValueGeneratedOnAdd()
-                                      .HasColumnType("integer");
-
-                                  NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                                  b.Property<string>("Description")
-                                      .IsRequired()
-                                      .HasColumnType("text");
-
-                                  b.Property<string>("ImgLink")
-                                      .IsRequired()
-                                      .HasColumnType("varchar(255)");
-
-                                  b.Property<string>("Name")
-                                      .IsRequired()
-                                      .HasColumnType("varchar(100)");
-
-                                  b.Property<decimal>("Price")
-                                      .HasColumnType("money");
-
-                                  b.HasKey("Id");
-
-                                  b.ToTable("Pies");
-                              });
-                              
-                modelBuilder.Entity("CatsAndPies.Domain.Entities.ExceptionLogEntity", b =>
+            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,32 +163,26 @@ namespace CatsAndPies.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ExceptionText")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("ExceptionTime")
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("ExceptionType")
+                    b.Property<string>("ImgLink")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Method")
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExceptionTime");
-
-                    b.ToTable("ExceptionLogs", (string)null);
+                    b.ToTable("Pies");
                 });
 
-                
             modelBuilder.Entity("CatsAndPies.Domain.Entities.QuestionnaireEntity", b =>
                 {
                     b.Property<int>("Id")

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CatsAndPies.Domain.Entities;
 using CatsAndPies.DAL.Configurations;
 using CatsAndPies.Domain.Entities.Cats;
+using CatsAndPies.Domain.Entities.PiesTables;
 
 namespace CatsAndPies.DAL
 {
@@ -25,6 +26,7 @@ namespace CatsAndPies.DAL
         public DbSet<CatEntity> Cats => Set<CatEntity>();
         public DbSet<CatsColorEntity> CatsColors => Set<CatsColorEntity>();
         public DbSet<CatsPersonalityEntity> CatsPersonalities => Set<CatsPersonalityEntity>();
+        public DbSet<PieEntity> Pies => Set<PieEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,7 @@ namespace CatsAndPies.DAL
             modelBuilder.ApplyConfiguration(new CatsConfiguration());
             modelBuilder.ApplyConfiguration(new CatsColorsConfiguration());
             modelBuilder.ApplyConfiguration(new CatsPersonalitiesConfiguration());
+            modelBuilder.ApplyConfiguration(new PiesConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
