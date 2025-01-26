@@ -10,26 +10,13 @@ namespace CatsAndPies.Domain.Helpres.Cache
 {
     public class RarityCache
     {
-        //private readonly IRarityRepository _rarityRepository;
         private List<RarityEntity> _cache; // Кеш редкостей
 
         public RarityCache(List<RarityEntity> rarities)
         {
-            //_rarityRepository = rarityRepository ?? throw new ArgumentNullException(nameof(rarityRepository));
             _cache = rarities;
 
         }
-
-        // Метод для загрузки данных в кеш
-        //private async Task LoadCacheAsync()
-        //{
-        //    var rarities = await _rarityRepository.GetAll(); // Получаем данные из репозитория
-        //    _cache.Clear(); // Очищаем старый кеш
-
-        //    _cache = rarities;
-        //}
-
-        // Получение шанса по Id редкости
         public double GetChance(int rarityId)
         {
             return _cache.Where(x => x.Id == rarityId)
@@ -40,12 +27,10 @@ namespace CatsAndPies.Domain.Helpres.Cache
         {
             return _cache;
         }
-
-        // Метод для обновления кеша вручную
-        //public void RefreshCache()
-        //{
-        //    LoadCache();
-        //}
+        public RarityEntity GetRarityById(int id)
+        {
+            return _cache.FirstOrDefault(x => x.Id == id)!;
+        }
     }
 
 }

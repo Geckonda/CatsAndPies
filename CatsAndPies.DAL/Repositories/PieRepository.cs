@@ -40,6 +40,13 @@ namespace CatsAndPies.DAL.Repositories
             return await _db.Pies.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<PieEntity>> GetUserPies(int userId)
+        {
+            return await _db.Pies
+                .Where(x => x.Owner.Id == userId)
+                .ToListAsync();
+        }
+
         public async Task Update(PieEntity entity)
         {
            await _db.Pies

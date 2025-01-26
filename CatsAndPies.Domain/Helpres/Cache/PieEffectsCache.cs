@@ -20,6 +20,10 @@ namespace CatsAndPies.Domain.Helpres.Cache
         {
             return _cache;
         }
+        public PieEffectEntity GetEffectById(int id)
+        {
+            return _cache.FirstOrDefault(x => x.Id == id)!;
+        }
         public PieEffectEntity GetEffectByRarityId(int rarityId)
         {
             var filtered = _cache.Where(x => x.RarityId == rarityId).ToList();

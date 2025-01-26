@@ -11,7 +11,7 @@ namespace CatsAndPies.Domain.Abstractions.Services
 {
     public interface IPieService
     {
-        Task<Result<List<PieEntity>>> TryGetAllPies();
+        Task<Result<List<PieResponseDTO>>> TryGetAllUserPies(int userId);
         Task<Result<PieResponseDTO>> TryCreatePie(int userId, string pieName);
     }
 }

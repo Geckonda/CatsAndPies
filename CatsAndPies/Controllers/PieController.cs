@@ -24,12 +24,13 @@ namespace CatsAndPies.Controllers
             _logger = logger;
         }
         private int GetUserId() => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-        [HttpGet("GetPies")]
+        [HttpGet("GetUserPies")]
+        [SwaggerOperation(Summary = "Получить все пироги пользователя", Description = "Возвращает список пирогов.")]
         public async Task<IActionResult> GetUserPies()
         {
             _logger.LogInformation("GetUserPies метод вызван {Time}", DateTime.UtcNow);
-            BaseResponse<List<PieEntity>> response;
-            var result = await _pieService.TryGetAllPies();
+            BaseResponse<List<PieResponseDTO>> response;
+            var result = await _pieService.TryGetAllUserPies(GetUserId());
             if (result.IsSuccess)
             {
                 response = new()

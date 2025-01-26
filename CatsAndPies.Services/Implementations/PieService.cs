@@ -53,12 +53,22 @@ namespace CatsAndPies.Services.Implementations
             return Result<PieResponseDTO>.SuccessResult(model);
         }
 
-        public async Task<Result<List<PieEntity>>> TryGetAllPies()
+        public async Task<Result<List<PieResponseDTO>>> TryGetAllUserPies(int userId)
         {
-            var pies = await _pieRepository.GetAll();
+            var pies = await _pieRepository.GetUserPies(userId);
             if (pies.Count == 0)
-                return Result<List<PieEntity>>.ErrorResult();
-            return Result<List<PieEntity>>.SuccessResult(pies);
+                return Result<List<PieResponseDTO>>.ErrorResult();
+            var result = new List<PieResponseDTO>();
+            foreach (var pie in pies)
+            {
+                var model = _mapper.Map<PieResponseDTO>(pie);
+                var effect = _effectCache.GetEffectById(pie.EffectId);
+                model.Effect = _mapper.Map<PieEffectResponseDTO>(effect);
+                var rarity = _rarityCache.GetRarityById(effect.RarityId);
+                model.Rarity = _mapper.Map<PieRarityResponseDTO>(rarity);
+                result.Add(model);
+            }
+            return Result<List<PieResponseDTO>>.SuccessResult(result);
         }
 
         private RarityEntity GenerateRarity()
