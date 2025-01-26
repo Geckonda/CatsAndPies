@@ -11,7 +11,8 @@ using System.Security.Claims;
 namespace CatsAndPies.Controllers
 {
     [Route("api/[controller]")]
-    [SwaggerTag("Работа с пирогами.")]
+    [ApiController]
+    [SwaggerTag("Работа с пирогами. (Partial Auth)")]
     public class PieController : Controller
     {
         private readonly ILogger<PieController> _logger;
@@ -24,9 +25,9 @@ namespace CatsAndPies.Controllers
         }
         private int GetUserId() => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
         [HttpGet("GetPies")]
-        public async Task<IActionResult> GetPies()
+        public async Task<IActionResult> GetUserPies()
         {
-            _logger.LogInformation("GetPies метод вызван {Time}", DateTime.UtcNow);
+            _logger.LogInformation("GetUserPies метод вызван {Time}", DateTime.UtcNow);
             BaseResponse<List<PieEntity>> response;
             var result = await _pieService.TryGetAllPies();
             if (result.IsSuccess)
@@ -48,7 +49,8 @@ namespace CatsAndPies.Controllers
             return NotFound(response);
         }
         [Authorize]
-        [HttpGet("AddPies")]
+        [SwaggerOperation(Summary = "(Auth). Создать пирог", Description = "Возвращает созданный пирог.")]
+        [HttpGet("AddPie")]
         public async Task<IActionResult> AddPie(string pieName)
         {
             _logger.LogInformation("AddPie метод вызван {Time}", DateTime.UtcNow);
@@ -58,7 +60,7 @@ namespace CatsAndPies.Controllers
             {
                 StatusCode = Domain.Enums.StatusCode.Ok,
                 Data = result.Data,
-                MessageForUser = "Пирожки получены."
+                MessageForUser = "Пирожок создан."
             };
             return Ok(response);
         }

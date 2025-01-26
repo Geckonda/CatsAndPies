@@ -10,7 +10,7 @@ namespace CatsAndPies.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    [SwaggerTag("Работа с анкетой. (Full Auth)")]
+    [SwaggerTag("Работа с кошельком. (Full Auth)")]
     public class WalletController : Controller
     {
 
