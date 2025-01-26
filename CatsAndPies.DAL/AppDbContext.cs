@@ -27,6 +27,8 @@ namespace CatsAndPies.DAL
         public DbSet<CatsColorEntity> CatsColors => Set<CatsColorEntity>();
         public DbSet<CatsPersonalityEntity> CatsPersonalities => Set<CatsPersonalityEntity>();
         public DbSet<PieEntity> Pies => Set<PieEntity>();
+        public DbSet<RarityEntity> Rarities => Set<RarityEntity>();
+        public DbSet<PieEffectEntity> PiesEffects => Set<PieEffectEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +41,8 @@ namespace CatsAndPies.DAL
             modelBuilder.ApplyConfiguration(new CatsColorsConfiguration());
             modelBuilder.ApplyConfiguration(new CatsPersonalitiesConfiguration());
             modelBuilder.ApplyConfiguration(new PiesConfiguration());
+            modelBuilder.ApplyConfiguration(new RaritiesConfiguration());
+            modelBuilder.ApplyConfiguration(new PiesEffectsConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

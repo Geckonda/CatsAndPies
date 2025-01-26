@@ -100,6 +100,7 @@ namespace CatsAndPies
             builder.Services.InitialiseServices();
             builder.Services.InitialiseMappers();
             builder.Services.InitialiseFactories();
+            builder.Services.InitialiseCaches();
 
             var app = builder.Build();
 

@@ -7,8 +7,10 @@ using CatsAndPies.Domain.Entities;
 using CatsAndPies.Domain.Entities.PiesTables;
 using CatsAndPies.Domain.Factories;
 using CatsAndPies.Domain.Helpres;
+using CatsAndPies.Domain.Helpres.Cache;
 using CatsAndPies.Services.Implementations;
 using CatsAndPies.Services.Mapping;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CatsAndPies
 {
@@ -22,6 +24,8 @@ namespace CatsAndPies
             services.AddScoped<IQuestionnaireRepository, QuestionnaireRepository>();
             services.AddScoped<ICatRepository, CatRepository>();
             services.AddScoped<IPieRepository, PieRepository>();
+            services.AddScoped<IRarityRepository, RarityRepository>();
+            services.AddScoped<IPieEffectRepository, PieEffectRepository>();
         }
 
         public static void InitialiseServices(this IServiceCollection services)
@@ -53,11 +57,31 @@ namespace CatsAndPies
                 cfg.AddProfile<UserMappingProfile>();
                 cfg.AddProfile<WalletMappingProfile>();
                 cfg.AddProfile<CatMappingProfile>();
+                cfg.AddProfile<PieMappingProfile>();
             });
         }
         public static void InitialiseFactories(this IServiceCollection services)
         {
             services.AddSingleton<CatFactory>();
+        }
+        public static void InitialiseCaches(this IServiceCollection services)
+        {
+            //services.AddSingleton<RarityCache>();
+            services.AddSingleton<RarityCache>(provider =>
+            {
+                using var scope = provider.CreateScope();
+                var rarityRepository = scope.ServiceProvider.GetRequiredService<IRarityRepository>();
+                var rarities = rarityRepository.GetAll().Result;
+                return new RarityCache(rarities);
+            });
+            services.AddSingleton<PieEffectsCache>(provider =>
+            {
+                using var scope = provider.CreateScope();
+                var effectRepository = scope.ServiceProvider.GetRequiredService<IPieEffectRepository>();
+                var effects = effectRepository.GetAll().Result;
+                return new PieEffectsCache(effects);
+            });
+            //services.AddSingleton<PieEffectsCache>();
         }
     }
 }

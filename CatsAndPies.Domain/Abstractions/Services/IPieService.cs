@@ -1,4 +1,5 @@
-﻿using CatsAndPies.Domain.Entities.PiesTables;
+﻿using CatsAndPies.Domain.DTO.Response.Pie;
+using CatsAndPies.Domain.Entities.PiesTables;
 using CatsAndPies.Domain.Responses;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace CatsAndPies.Domain.Abstractions.Services
     public interface IPieService
     {
         Task<Result<List<PieEntity>>> TryGetAllPies();
+        Task<Result<PieResponseDTO>> TryCreatePie(int userId, string pieName);
     }
 }

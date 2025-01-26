@@ -1,12 +1,13 @@
-﻿using System;
+﻿using CatsAndPies.Domain.Entities.PiesTables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CatsAndPies.Domain.Entities.PiesTables
+namespace CatsAndPies.Domain.DTO.Response.Pie
 {
-    public class PieEntity
+    public class PieResponseDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -15,9 +16,8 @@ namespace CatsAndPies.Domain.Entities.PiesTables
         public DateTime Created { get; set; }
         public string ImgLink { get; set; } = string.Empty;
 
-        public int EffectId { get; set; }
-        public PieEffectEntity Effect { get; set; }
-        public int OwnerId { get; set; }
-        public UserEntity Owner { get; set; }
+
+        public PieEffectResponseDTO Effect { get; set; }
+        public PieRarityResponseDTO Rarity { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CatsAndPies.Domain.Entities.PiesTables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,6 @@ namespace CatsAndPies.Domain.Entities
         public QuestionnaireEntity? Questionnaire { get; set; }
         public CatEntity? Cat { get; set; }
         public WalletEntity? Wallet { get; set; }
+        public List<PieEntity> Pies { get; set; }
     }
 }

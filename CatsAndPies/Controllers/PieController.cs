@@ -1,9 +1,12 @@
 ﻿using CatsAndPies.Domain.Abstractions.Services;
 using CatsAndPies.Domain.DTO.Response;
+using CatsAndPies.Domain.DTO.Response.Pie;
 using CatsAndPies.Domain.Entities.PiesTables;
 using CatsAndPies.Domain.Models.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace CatsAndPies.Controllers
 {
@@ -19,6 +22,7 @@ namespace CatsAndPies.Controllers
             _pieService = pieService;
             _logger = logger;
         }
+        private int GetUserId() => Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
         [HttpGet("GetPies")]
         public async Task<IActionResult> GetPies()
         {
@@ -42,6 +46,21 @@ namespace CatsAndPies.Controllers
                 MessageForUser = "Пирожки не найдены."
             };
             return NotFound(response);
+        }
+        [Authorize]
+        [HttpGet("AddPies")]
+        public async Task<IActionResult> AddPie(string pieName)
+        {
+            _logger.LogInformation("AddPie метод вызван {Time}", DateTime.UtcNow);
+
+            var result = await _pieService.TryCreatePie(GetUserId(), pieName);
+            var response = new BaseResponse<PieResponseDTO>()
+            {
+                StatusCode = Domain.Enums.StatusCode.Ok,
+                Data = result.Data,
+                MessageForUser = "Пирожки получены."
+            };
+            return Ok(response);
         }
     }
 }

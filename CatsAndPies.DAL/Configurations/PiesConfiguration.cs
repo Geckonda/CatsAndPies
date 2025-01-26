@@ -25,9 +25,22 @@ namespace CatsAndPies.DAL.Configurations
                 .HasColumnType("money")
                 .IsRequired();
 
+            builder.Property(q => q.Created)
+                .HasColumnType("date")
+                .IsRequired();
+
             builder.Property(x => x.ImgLink)
                 .HasColumnType("varchar(255)");
 
+            builder
+                .HasOne(x => x.Effect)
+                .WithMany(x => x.Pies)
+                .HasForeignKey(x => x.EffectId);
+
+            builder
+                .HasOne(x => x.Owner)
+                .WithMany(x => x.Pies)
+                .HasForeignKey(x => x.OwnerId);
         }
     }
 }
