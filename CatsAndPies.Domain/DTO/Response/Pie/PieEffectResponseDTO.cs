@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CatsAndPies.Domain.DTO.Response.Cat
+namespace CatsAndPies.Domain.DTO.Response.Pie
 {
-    public class CatColorResponseDTO
+    public class PieEffectResponseDTO
     {
-
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string HexColor { get; set; }
+        public string Description { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,8 @@
 ﻿using CatsAndPies.Domain.Enums;
+using CatsAndPies.Domain.Exceptions.Items;
+using CatsAndPies.Domain.Helpres;
 using CatsAndPies.Domain.Models.Response;
+using CatsAndPies.Services.Implementations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,9 +16,9 @@ namespace CatsAndPies.Domain.Exceptions
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly LogQueueService _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next, LogQueueService logger)
         {
             _next = next;
             _logger = logger;
@@ -23,16 +26,33 @@ namespace CatsAndPies.Domain.Exceptions
 
         public async Task InvokeAsync(HttpContext context)
         {
+            BaseResponse<object> response;
             try
             {
                 await _next(context);
             }
+            catch(RequestHandlingException ex)
+            {
+                _logger.Enqueue(ExceptionLogHelper.ParseException(ex, typeof(ExceptionHandlingMiddleware)));
+
+                response = new()
+                {
+                    StatusCode = ex.StatusCode,
+                    MessageForUser = ex.MessageForUser,
+                };
+                if (ex.AdditionalData != null)
+                    response.Data = ex.AdditionalData;
+
+                context.Response.StatusCode = (int)ex.StatusCode;
+                context.Response.ContentType = "application/json";
+
+                await context.Response.WriteAsJsonAsync(response);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Exception caught in middleware. Path: {Path}", context.Request.Path);
-                _logger.LogError(ex.Message);
+                _logger.Enqueue(ExceptionLogHelper.ParseException(ex, typeof(ExceptionHandlingMiddleware)));
 
-                var response = new BaseResponse<object>
+                response = new()
                 {
                     StatusCode = StatusCode.InternalServerError,
                     Data = null,

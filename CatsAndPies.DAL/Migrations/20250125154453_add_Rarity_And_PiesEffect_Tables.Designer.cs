@@ -3,6 +3,7 @@ using System;
 using CatsAndPies.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CatsAndPies.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250125154453_add_Rarity_And_PiesEffect_Tables")]
+    partial class add_Rarity_And_PiesEffect_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,9 +218,6 @@ namespace CatsAndPies.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("date");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -233,17 +233,12 @@ namespace CatsAndPies.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("money");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EffectId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Pies");
                 });
@@ -508,15 +503,7 @@ namespace CatsAndPies.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CatsAndPies.Domain.Entities.UserEntity", "Owner")
-                        .WithMany("Pies")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Effect");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("CatsAndPies.Domain.Entities.QuestionnaireEntity", b =>
@@ -580,8 +567,6 @@ namespace CatsAndPies.DAL.Migrations
             modelBuilder.Entity("CatsAndPies.Domain.Entities.UserEntity", b =>
                 {
                     b.Navigation("Cat");
-
-                    b.Navigation("Pies");
 
                     b.Navigation("Questionnaire");
 

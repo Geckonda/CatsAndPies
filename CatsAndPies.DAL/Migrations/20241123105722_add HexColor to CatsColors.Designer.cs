@@ -3,6 +3,7 @@ using System;
 using CatsAndPies.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CatsAndPies.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241123105722_add HexColor to CatsColors")]
+    partial class addHexColortoCatsColors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,163 +155,6 @@ namespace CatsAndPies.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.ExceptionLogEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ExceptionText")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateTime>("ExceptionTime")
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("ExceptionType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<string>("Method")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExceptionTime");
-
-                    b.ToTable("ExceptionLogs", (string)null);
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEffectEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RarityId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RarityId");
-
-                    b.ToTable("PiesEffects");
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("EffectId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ImgLink")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("money");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EffectId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Pies");
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.RarityEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Chance")
-                        .HasColumnType("DOUBLE PRECISION");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Rarities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Chance = 60.0,
-                            Name = "Обычный"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Chance = 25.0,
-                            Name = "Необычный"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Chance = 10.0,
-                            Name = "Редкий"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Chance = 4.0,
-                            Name = "Эпический"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Chance = 0.90000000000000002,
-                            Name = "Легендарный"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Chance = 0.10000000000000001,
-                            Name = "Мифический"
-                        });
-                });
-
             modelBuilder.Entity("CatsAndPies.Domain.Entities.QuestionnaireEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -440,28 +286,6 @@ namespace CatsAndPies.DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.WalletEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("money");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Wallets");
-                });
-
             modelBuilder.Entity("CatsAndPies.Domain.Entities.CatEntity", b =>
                 {
                     b.HasOne("CatsAndPies.Domain.Entities.Cats.CatsColorEntity", "Color")
@@ -489,36 +313,6 @@ namespace CatsAndPies.DAL.Migrations
                     b.Navigation("Personality");
                 });
 
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEffectEntity", b =>
-                {
-                    b.HasOne("CatsAndPies.Domain.Entities.PiesTables.RarityEntity", "Rarity")
-                        .WithMany("Effects")
-                        .HasForeignKey("RarityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Rarity");
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEntity", b =>
-                {
-                    b.HasOne("CatsAndPies.Domain.Entities.PiesTables.PieEffectEntity", "Effect")
-                        .WithMany("Pies")
-                        .HasForeignKey("EffectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CatsAndPies.Domain.Entities.UserEntity", "Owner")
-                        .WithMany("Pies")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Effect");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("CatsAndPies.Domain.Entities.QuestionnaireEntity", b =>
                 {
                     b.HasOne("CatsAndPies.Domain.Entities.UserEntity", "User")
@@ -541,17 +335,6 @@ namespace CatsAndPies.DAL.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.WalletEntity", b =>
-                {
-                    b.HasOne("CatsAndPies.Domain.Entities.UserEntity", "User")
-                        .WithOne("Wallet")
-                        .HasForeignKey("CatsAndPies.Domain.Entities.WalletEntity", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("CatsAndPies.Domain.Entities.Cats.CatsColorEntity", b =>
                 {
                     b.Navigation("Cats");
@@ -560,16 +343,6 @@ namespace CatsAndPies.DAL.Migrations
             modelBuilder.Entity("CatsAndPies.Domain.Entities.Cats.CatsPersonalityEntity", b =>
                 {
                     b.Navigation("Cats");
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.PieEffectEntity", b =>
-                {
-                    b.Navigation("Pies");
-                });
-
-            modelBuilder.Entity("CatsAndPies.Domain.Entities.PiesTables.RarityEntity", b =>
-                {
-                    b.Navigation("Effects");
                 });
 
             modelBuilder.Entity("CatsAndPies.Domain.Entities.RoleEntity", b =>
@@ -581,11 +354,7 @@ namespace CatsAndPies.DAL.Migrations
                 {
                     b.Navigation("Cat");
 
-                    b.Navigation("Pies");
-
                     b.Navigation("Questionnaire");
-
-                    b.Navigation("Wallet");
                 });
 #pragma warning restore 612, 618
         }
